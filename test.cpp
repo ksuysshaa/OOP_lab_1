@@ -2,10 +2,11 @@
 
 void tests()
 {
-    constructors_check();
+    length_constructor_check();
+    copy_constructor_check();
 }
 
-void constructors_check()
+void length_constructor_check()
 {
     const int rows = 5;
     const int cols = 6;
@@ -36,4 +37,21 @@ void constructors_check()
     {
         std::cout << ex << std::endl;
     }
+}
+
+void copy_constructor_check()
+{
+    Matrix <int> init_matrix ({{1, 2, 3},
+                               {4, 5, 6}});
+    std::cout << "basic matrix: " << init_matrix << std::endl;    
+    Matrix <int> copied_matrix (init_matrix);
+    std::cout << "copy constructor" << std::endl;
+    std::cout << "basic matrix: " << init_matrix << "new matrix: " << copied_matrix << std::endl;
+//    for (int i = 0; i < init_matrix.get_rows(); i++)
+//    {
+//        for (int j = 0; j < copied_matrix.get_cols(); j++)
+//        {
+//            data[i][j] = mat[i][j];
+//        }
+//    }
 }

@@ -5,6 +5,7 @@
 #include "exceptions.h"
 
 void tests();
-void constructors_check();
+void length_constructor_check();
+void copy_constructor_check();
 
 #endif // TEST_H
