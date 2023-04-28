@@ -28,7 +28,7 @@ public:
     bool is_square();
 
     T& operator ()(unsigned int i, unsigned int j);
-
+    T& get_elem (unsigned int i, unsigned int j);
 
     template <typename _T>
     friend std::ostream& operator <<(std::ostream& os, const Matrix<_T>& mat);
@@ -37,14 +37,12 @@ public:
 template <typename T>
 void Matrix <T>::alloc_memory()
 {
-    try
-    {
+    try {
         data = new T* [rows];
         for (int i = 0; i < rows; i++)
             data[i] = new T [cols];
     }
-    catch (std::bad_alloc &ex)
-    {
+    catch (std::bad_alloc &ex) {
         throw Exceptions ("memory allocation error.");
         if (data != NULL)
             delete[] data;
@@ -64,13 +62,12 @@ Matrix <T>::Matrix (int n, int m)
 template <typename T>
 Matrix <T>::Matrix(const Matrix<T>& mat)
 {
-    rows = get_rows();
-    cols = get_cols();
+    rows = mat.get_rows();
+    cols = mat.get_cols();
     if (rows == 0 || cols == 0)
         throw Exceptions ("memory allocation error.");
     alloc_memory();
-    for (int i = 0; i<rows; i++)
-    {
+    for (int i = 0; i<rows; i++) {
         for (int j = 0; j<cols; j++)
             data[i][j] = mat.data[i][j];
     }
@@ -79,18 +76,25 @@ Matrix <T>::Matrix(const Matrix<T>& mat)
 template <typename T>
 Matrix <T>::Matrix(std::initializer_list<std::initializer_list< T>> lst)
 {
-    int ind_i = 0;
-    int ind_j = 0;
+    int ind_i = 0, ind_j = 0;
     rows = lst.size();
-    cols = 3;
-    alloc_memory();
     for (auto i : lst) {
-        ind_j = 0;
-        for (auto j : i) {           
-            data[ind_i][ind_j] = j;
-            ind_j++;
+        for (auto j : i)
+            cols++;
+        break;
+    }
+    if (rows == 0 || cols == 0)
+        data = nullptr;
+    else {
+        alloc_memory();
+        for (auto i : lst) {
+            ind_j = 0;
+            for (auto j : i) {
+                set_elem(ind_i, ind_j, j);
+                ind_j++;
+            }
+            ind_i++;
         }
-        ind_i++;
     }
 }
 
@@ -127,10 +131,9 @@ template <typename _T>
 std::ostream& operator <<(std::ostream& os, const Matrix<_T>& mat)
 {
     //проверка на 0
-    for (int i = 0; i<2; i++)
-    {
+    for (int i = 0; i<mat.get_rows(); i++) {
         os << "\n";
-        for (int j = 0; j<3; j++)
+        for (int j = 0; j<mat.get_cols(); j++)
             os << mat.data[i][j] << " ";
     }
     os << "\n";
@@ -140,13 +143,23 @@ std::ostream& operator <<(std::ostream& os, const Matrix<_T>& mat)
 template <typename T>
 void Matrix <T>::set_elem(unsigned int i, unsigned j, const T& elem)
 {
+    if (i < 0 || i >= get_rows() || j < 0 || j >= get_cols())
+        throw Exceptions ("incorrect index");
     data[i][j] = elem;
 }
 
 template <typename T>
 T& Matrix <T>::operator ()(unsigned int i, unsigned int j)
 {
-    if (i < 0 || i >= rows || j < 0 || j >= cols)
+    if (i < 0 || i > get_rows() || j < 0 || j > get_cols())
+        throw Exceptions ("incorrect index");
+    return data[i][j];
+}
+
+template <typename T>
+T& Matrix <T>::get_elem (unsigned int i, unsigned int j)
+{
+    if (i < 0 || i > get_rows() || j < 0 || j > get_cols())
         throw Exceptions ("incorrect index");
     return data[i][j];
 }
