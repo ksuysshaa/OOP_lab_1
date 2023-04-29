@@ -23,12 +23,16 @@ public:
 
     int get_rows() const;
     int get_cols() const;
-    void set_elem(unsigned int i, unsigned j, const T& elem);
 
     bool is_square();
 
-    T& operator ()(unsigned int i, unsigned int j);
+    void set_elem(unsigned int i, unsigned j, const T& elem);
+    T& operator () (unsigned int i, unsigned int j);
     T& get_elem (unsigned int i, unsigned int j);
+
+    Matrix<T>& operator = (const Matrix<T>&mat);
+    Matrix<T>& operator +=(const Matrix<T>&mat);
+    Matrix<T>& operator -=(const Matrix<T>&mat);
 
     template <typename _T>
     friend std::ostream& operator <<(std::ostream& os, const Matrix<_T>& mat);
@@ -78,6 +82,7 @@ Matrix <T>::Matrix(std::initializer_list<std::initializer_list< T>> lst)
 {
     int ind_i = 0, ind_j = 0;
     rows = lst.size();
+    cols = 0;
     for (auto i : lst) {
         for (auto j : i)
             cols++;
@@ -130,7 +135,8 @@ bool Matrix <T>::is_square()
 template <typename _T>
 std::ostream& operator <<(std::ostream& os, const Matrix<_T>& mat)
 {
-    //проверка на 0
+    if (mat.get_rows() == 0 || mat.get_cols() == 0)
+        throw Exceptions ("matrix is null.");
     for (int i = 0; i<mat.get_rows(); i++) {
         os << "\n";
         for (int j = 0; j<mat.get_cols(); j++)
@@ -141,7 +147,7 @@ std::ostream& operator <<(std::ostream& os, const Matrix<_T>& mat)
 }
 
 template <typename T>
-void Matrix <T>::set_elem(unsigned int i, unsigned j, const T& elem)
+void Matrix <T>::set_elem (unsigned int i, unsigned j, const T& elem)
 {
     if (i < 0 || i >= get_rows() || j < 0 || j >= get_cols())
         throw Exceptions ("incorrect index");
@@ -149,7 +155,7 @@ void Matrix <T>::set_elem(unsigned int i, unsigned j, const T& elem)
 }
 
 template <typename T>
-T& Matrix <T>::operator ()(unsigned int i, unsigned int j)
+T& Matrix <T>::operator () (unsigned int i, unsigned int j)
 {
     if (i < 0 || i > get_rows() || j < 0 || j > get_cols())
         throw Exceptions ("incorrect index");
@@ -163,5 +169,43 @@ T& Matrix <T>::get_elem (unsigned int i, unsigned int j)
         throw Exceptions ("incorrect index");
     return data[i][j];
 }
+
+template <typename T>
+Matrix<T>& Matrix <T>::operator = (const Matrix<T>& mat)
+{
+//    for (int i = 0; i< rows; i++)
+//        delete[] data[i];
+//    delete[] data;
+    if (rows != mat.get_rows() || cols != mat.get_cols())
+        throw Exceptions ("different size of matrix.");
+    alloc_memory();
+    for (int i = 0; i<rows; i++)
+        for (int j = 0; j<cols; j++)
+            data[i][j] = mat.data[i][j];
+    return *this;
+}
+
+template <typename T>
+Matrix<T>& Matrix<T>::operator +=(const Matrix<T>&mat)
+{
+    if (rows != mat.get_rows() || cols != mat.get_cols())
+        throw Exceptions ("different size of matrix.");
+    for (int i = 0; i<rows; i++)
+        for (int j = 0; j<cols; j++)
+            data[i][j] += mat.data[i][j];
+    return *this;
+}
+
+template <typename T>
+Matrix<T>& Matrix<T>::operator -=(const Matrix<T>&mat)
+{
+    if (rows != mat.get_rows() || cols != mat.get_cols())
+        throw Exceptions ("different size of matrix.");
+    for (int i = 0; i<rows; i++)
+        for (int j = 0; j<cols; j++)
+            data[i][j] -= mat.data[i][j];
+    return *this;
+}
+
 
 #endif // MATRIX_H

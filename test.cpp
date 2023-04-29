@@ -4,6 +4,9 @@ void tests()
 {
     length_constructor_check();
     copy_constructor_check();
+    operator_equal_check();
+    operator_equal_sum_check();
+    operator_equal_diff_check();
 }
 
 void length_constructor_check()
@@ -43,6 +46,39 @@ void copy_constructor_check()
     Matrix <int> copied_matrix (init_matrix);
     std::cout << "copy constructor:" << std::endl;
     std::cout << "initial matrix: " << init_matrix << "copied matrix: " << copied_matrix << std::endl;
+    for (int i = 0; i<init_matrix.get_rows(); i++)
+        for (int j = 0; j<init_matrix.get_cols(); j++)
+            if (init_matrix(i,j) != copied_matrix(i,j))
+                std::cerr << "copy constuctor error" << std::endl;
+}
 
+void operator_equal_check()
+{
+    std::cout << "----------------------------------------------" << std::endl;
+    Matrix <int> init_matrix ({{1, 2, 3}, {4, 5, 6}});
+    Matrix <int> equal_matrix = init_matrix;
+    std::cout << "operator =:" << std::endl;
+    std::cout << "initial matrix: " << init_matrix << "equal matrix: " << equal_matrix << std::endl;
+}
 
+void operator_equal_sum_check()
+{
+    std::cout << "----------------------------------------------" << std::endl;
+    std::cout << "operator +=:" << std::endl;
+    Matrix <int> init_matrix ({{1, 2, 3}, {4, 5, 6}});
+    std::cout << "initial matrix: " << init_matrix;
+    Matrix <int> sum_matrix ({{1, 2, 3}, {4, 5, 6}});
+    init_matrix += sum_matrix;
+    std::cout << "equal sum matrix: " << init_matrix << std::endl;
+}
+
+void operator_equal_diff_check()
+{
+    std::cout << "----------------------------------------------" << std::endl;
+    std::cout << "operator +=:" << std::endl;
+    Matrix <int> init_matrix ({{1, 2, 3}, {4, 5, 6}});
+    std::cout << "initial matrix: " << init_matrix;
+    Matrix <int> min_matrix ({{4, 5, 6}, {1, 2, 3}});
+    init_matrix -= min_matrix;
+    std::cout << "equal sum matrix: " << init_matrix << std::endl;
 }
