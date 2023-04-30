@@ -7,6 +7,13 @@ void tests()
     operator_equal_check();
     operator_equal_sum_check();
     operator_equal_diff_check();
+    operator_plus();
+    operator_minus();
+    operator_mult();
+    operator_mat_plus_num();
+    operator_mat_minus_num();
+    operator_mat_div_num();
+    operator_mat_mult_num();
 }
 
 void length_constructor_check()
@@ -75,10 +82,87 @@ void operator_equal_sum_check()
 void operator_equal_diff_check()
 {
     std::cout << "----------------------------------------------" << std::endl;
-    std::cout << "operator +=:" << std::endl;
+    std::cout << "operator -=:" << std::endl;
     Matrix <int> init_matrix ({{1, 2, 3}, {4, 5, 6}});
     std::cout << "initial matrix: " << init_matrix;
     Matrix <int> min_matrix ({{4, 5, 6}, {1, 2, 3}});
     init_matrix -= min_matrix;
-    std::cout << "equal sum matrix: " << init_matrix << std::endl;
+    std::cout << "equal diff matrix: " << init_matrix << std::endl;
+}
+
+void operator_plus()
+{
+    std::cout << "----------------------------------------------" << std::endl;
+    std::cout << "operator +:" << std::endl;
+    Matrix <int> init_matrix ({{1, 2, 3}, {4, 5, 6}});
+    std::cout << "initial matrix: " << init_matrix;
+    Matrix <int> sec_matrix ({{4, 5, 6}, {1, 2, 3}});
+    Matrix <int> res_matrix = init_matrix + sec_matrix;
+    std::cout << "result matrix: " << res_matrix << std::endl;
+}
+
+void operator_minus()
+{
+    std::cout << "----------------------------------------------" << std::endl;
+    std::cout << "operator -:" << std::endl;
+    Matrix <int> init_matrix ({{1, 2, 3}, {4, 5, 6}});
+    std::cout << "initial matrix: " << init_matrix;
+    Matrix <int> sec_matrix ({{4, 5, 6}, {1, 2, 3}});
+    Matrix <int> res_matrix = init_matrix - sec_matrix;
+    std::cout << "result matrix: " << res_matrix << std::endl;
+}
+
+void operator_mult()
+{
+    std::cout << "----------------------------------------------" << std::endl;
+    std::cout << "operator *:" << std::endl;
+    Matrix <int> init_matrix ({{1, 2, 3}, {4, 5, 6}});
+    std::cout << "initial matrix: " << init_matrix;
+    Matrix <int> sec_matrix ({{4, 5, 6}, {1, 2, 3}});
+    Matrix <int> res_matrix = init_matrix * sec_matrix;
+    std::cout << "result matrix: " << res_matrix << std::endl;
+}
+
+void operator_mat_plus_num()
+{
+    std::cout << "----------------------------------------------" << std::endl;
+    std::cout << "operator + for matrix and number:" << std::endl;
+    Matrix <double> init_matrix ({{1, 2, 3}, {4, 5, 6}});
+    std::cout << "initial matrix: " << init_matrix;
+    double a = 5.2;
+    Matrix <double> res_matrix = init_matrix + a;
+    std::cout << "result matrix: " << res_matrix << std::endl;
+}
+
+void operator_mat_minus_num()
+{
+    std::cout << "----------------------------------------------" << std::endl;
+    std::cout << "operator + for matrix and number:" << std::endl;
+    Matrix <double> init_matrix ({{1, 2, 3}, {4, 5, 6}});
+    std::cout << "initial matrix: " << init_matrix;
+    double a = 5.2;
+    Matrix <double> res_matrix = init_matrix - a;
+    std::cout << "result matrix: " << res_matrix << std::endl;
+}
+
+void operator_mat_div_num()
+{
+    std::cout << "----------------------------------------------" << std::endl;
+    std::cout << "operator + for matrix and number:" << std::endl;
+    Matrix <double> init_matrix ({{1, 2, 3}, {4, 5, 6}});
+    std::cout << "initial matrix: " << init_matrix;
+    double a = 5.2;
+    Matrix <double> res_matrix = init_matrix / a;
+    std::cout << "result matrix: " << res_matrix << std::endl;
+}
+
+void operator_mat_mult_num()
+{
+    std::cout << "----------------------------------------------" << std::endl;
+    std::cout << "operator + for matrix and number:" << std::endl;
+    Matrix <double> init_matrix ({{1, 2, 3}, {4, 5, 6}});
+    std::cout << "initial matrix: " << init_matrix;
+    double a = 5.2;
+    Matrix <double> res_matrix = init_matrix * a;
+    std::cout << "result matrix: " << res_matrix << std::endl;
 }

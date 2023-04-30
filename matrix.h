@@ -34,6 +34,15 @@ public:
     Matrix<T>& operator +=(const Matrix<T>&mat);
     Matrix<T>& operator -=(const Matrix<T>&mat);
 
+    Matrix<T> operator +(const Matrix<T>& mat);
+    Matrix<T> operator -(const Matrix<T>& mat);
+    Matrix<T> operator *(const Matrix<T>& mat);
+
+    Matrix<T> operator +(double num);
+    Matrix<T> operator -(double num);
+    Matrix<T> operator *(double num);
+    Matrix<T> operator /(double num);
+
     template <typename _T>
     friend std::ostream& operator <<(std::ostream& os, const Matrix<_T>& mat);
 };
@@ -197,7 +206,7 @@ Matrix<T>& Matrix<T>::operator +=(const Matrix<T>&mat)
 }
 
 template <typename T>
-Matrix<T>& Matrix<T>::operator -=(const Matrix<T>&mat)
+Matrix<T>& Matrix<T>::operator -= (const Matrix<T> &mat)
 {
     if (rows != mat.get_rows() || cols != mat.get_cols())
         throw Exceptions ("different size of matrix.");
@@ -207,5 +216,69 @@ Matrix<T>& Matrix<T>::operator -=(const Matrix<T>&mat)
     return *this;
 }
 
+template<typename T>
+Matrix<T> Matrix <T>::operator +(const Matrix<T>& mat)
+{
+    Matrix <T> new_mat(*this);
+    new_mat += mat;
+    return new_mat;
+}
 
+template<typename T>
+Matrix<T> Matrix <T>::operator -(const Matrix<T>& mat)
+{
+    Matrix <T> new_mat(*this);
+    new_mat -= mat;
+    return new_mat;
+}
+
+template<typename T>
+Matrix<T> Matrix <T>::operator *(const Matrix<T>& mat)
+{
+    Matrix <T> new_mat(*this);
+    for (int i = 0; i<mat.get_rows(); i++)
+        for (int j = 0; j<mat.get_cols(); j++)
+            new_mat.data[i][j] *= mat.data[i][j];
+    return new_mat;
+}
+
+template <typename T>
+Matrix<T> Matrix <T>::operator +(double num)
+{
+    Matrix <T> new_mat(*this);
+    for (int i = 0; i<new_mat.get_rows(); i++)
+        for (int j = 0; j<new_mat.get_cols(); j++)
+            new_mat.data[i][j] += num;
+    return new_mat;
+}
+
+template <typename T>
+Matrix<T> Matrix <T>::operator -(double num)
+{
+    Matrix <T> new_mat(*this);
+    for (int i = 0; i<new_mat.get_rows(); i++)
+        for (int j = 0; j<new_mat.get_cols(); j++)
+            new_mat.data[i][j] -= num;
+    return new_mat;
+}
+
+template <typename T>
+Matrix<T> Matrix <T>::operator *(double num)
+{
+    Matrix <T> new_mat(*this);
+    for (int i = 0; i<new_mat.get_rows(); i++)
+        for (int j = 0; j<new_mat.get_cols(); j++)
+            new_mat.data[i][j] *= num;
+    return new_mat;
+}
+
+template <typename T>
+Matrix<T> Matrix <T>::operator /(double num)
+{
+    Matrix <T> new_mat(*this);
+    for (int i = 0; i<new_mat.get_rows(); i++)
+        for (int j = 0; j<new_mat.get_cols(); j++)
+            new_mat.data[i][j] /= num;
+    return new_mat;
+}
 #endif // MATRIX_H
