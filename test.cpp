@@ -34,7 +34,6 @@ void length_constructor_check()
     } catch (Exceptions &ex) {
         std::cout << ex;
     }
-
     if (mat.get_cols() != cols)
         std::cerr << "error with length constructor" << std::endl;
     std::cout << "trying size for cols: " << -cols << std::endl;
@@ -137,7 +136,7 @@ void operator_mat_plus_num()
 void operator_mat_minus_num()
 {
     std::cout << "----------------------------------------------" << std::endl;
-    std::cout << "operator + for matrix and number:" << std::endl;
+    std::cout << "operator - for matrix and number:" << std::endl;
     Matrix <double> init_matrix ({{1, 2, 3}, {4, 5, 6}});
     std::cout << "initial matrix: " << init_matrix;
     double a = 5.2;
@@ -148,7 +147,7 @@ void operator_mat_minus_num()
 void operator_mat_div_num()
 {
     std::cout << "----------------------------------------------" << std::endl;
-    std::cout << "operator + for matrix and number:" << std::endl;
+    std::cout << "operator / for matrix and number:" << std::endl;
     Matrix <double> init_matrix ({{1, 2, 3}, {4, 5, 6}});
     std::cout << "initial matrix: " << init_matrix;
     double a = 5.2;
@@ -159,7 +158,7 @@ void operator_mat_div_num()
 void operator_mat_mult_num()
 {
     std::cout << "----------------------------------------------" << std::endl;
-    std::cout << "operator + for matrix and number:" << std::endl;
+    std::cout << "operator * for matrix and number:" << std::endl;
     Matrix <double> init_matrix ({{1, 2, 3}, {4, 5, 6}});
     std::cout << "initial matrix: " << init_matrix;
     double a = 5.2;

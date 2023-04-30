@@ -10,5 +10,6 @@ SOURCES += \
 
 HEADERS += \
     exceptions.h \
+    iterator.h \
     matrix.h \
     test.h
