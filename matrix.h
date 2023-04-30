@@ -19,6 +19,7 @@ public:
     explicit Matrix(int n, int m);
     ~Matrix();
     Matrix(const Matrix<T>& mat);
+    Matrix (Matrix<T>&& mat);
     explicit Matrix(std::initializer_list < std::initializer_list < T >> lst);
 
     int get_rows() const;
@@ -46,11 +47,11 @@ public:
     template <typename _T>
     friend std::ostream& operator <<(std::ostream& os, const Matrix<_T>& mat);
 
-    Iterator<T> iterator_begin(){return Iterator<T>(*this, 0, 0);};
-    Iterator<T> iterator_end(){return Iterator<T>(*this, get_rows(), get_cols());};
+    Iterator<T> iterator_begin() {return Iterator<T>(*this, 0, 0);};
+    Iterator<T> iterator_end() {return Iterator<T>(*this, get_rows(), get_cols());};
 };
 
-template <typename T>
+template <typename T> //выделение памяти - вспомогательная функция
 void Matrix <T>::alloc_memory()
 {
     try {
@@ -65,7 +66,7 @@ void Matrix <T>::alloc_memory()
     }
 }
 
-template <typename T>
+template <typename T> //конструктор длины
 Matrix <T>::Matrix (int n, int m)
 {
     if (n < 0 || m < 0)
@@ -76,7 +77,7 @@ Matrix <T>::Matrix (int n, int m)
 }
 
 template <typename T>
-Matrix <T>::Matrix(const Matrix<T>& mat)
+Matrix <T>::Matrix(const Matrix<T>& mat) //конструктор копирования
 {
     rows = mat.get_rows();
     cols = mat.get_cols();
@@ -89,8 +90,20 @@ Matrix <T>::Matrix(const Matrix<T>& mat)
     }
 }
 
+template <typename T> //конструктор перемещения
+Matrix <T>::Matrix (Matrix<T>&& mat)
+{
+    data = mat.data;
+    rows = mat.rows;
+    cols = mat.cols;
+    for (int i = 0; i<rows; i++)
+        mat.data[i] = nullptr;
+    mat.data = nullptr;
+    printf("dsjjss");
+}
+
 template <typename T>
-Matrix <T>::Matrix(std::initializer_list<std::initializer_list< T>> lst)
+Matrix <T>::Matrix(std::initializer_list<std::initializer_list< T>> lst) //конструктор со списком инициализации
 {
     int ind_i = 0, ind_j = 0;
     rows = lst.size();
@@ -101,7 +114,7 @@ Matrix <T>::Matrix(std::initializer_list<std::initializer_list< T>> lst)
         break;
     }
     if (rows == 0 || cols == 0)
-        data = nullptr;
+        throw Exceptions ("incorrect initializer list.");
     else {
         alloc_memory();
         for (auto i : lst) {
