@@ -2,6 +2,7 @@
 #define TEST_H
 
 #include "matrix.h"
+#include "iterator.h"
 #include "exceptions.h"
 
 void tests();
@@ -23,6 +24,6 @@ void get_elem_check();
 void is_square_check();
 void get_rows_cols_check();
 void set_elem_check();
-
+void iterator_begin_end_check();
 
 #endif // TEST_H

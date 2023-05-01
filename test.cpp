@@ -21,6 +21,8 @@ void tests()
     is_square_check();
     set_elem_check();
 
+    iterator_begin_end_check();
+
     move_constructor_check();
 }
 
@@ -464,4 +466,17 @@ void set_elem_check()
     } catch (Exceptions &ex) {
         std::cout << ex << std::endl;
     }
+}
+
+void iterator_begin_end_check()
+{
+    std::cout << "----------------------------------------------" << std::endl;
+    std::cout << "iterator begin:" << std::endl;
+    Matrix <int> matrix ({{1, 2, 3}, {4, 5, 6}});
+    Iterator <int> it_1 = matrix.iterator_begin();
+    it_1.is_begin() ? std::cout << "test passed" << std::endl : std::cout << "test not passed. iterator begin error." << std::endl;
+
+    std::cout << "iterator end:" << std::endl;
+    Iterator <int> it_2 = matrix.iterator_end();
+    it_2.is_end() ? std::cout << "test passed" << std::endl : std::cout << "test not passed. iterator end error." << std::endl;
 }
