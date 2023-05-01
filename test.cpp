@@ -16,9 +16,11 @@ void tests()
     operator_mat_minus_num();
     operator_mat_div_num();
     operator_mat_mult_num();
-
     get_elem_check();
+    get_rows_cols_check();
     is_square_check();
+    set_elem_check();
+
     move_constructor_check();
 }
 
@@ -410,4 +412,56 @@ void is_square_check()
         std::cout<<"matrix is a square."<<std::endl;
     else
         std::cout<<"matrix is not a square."<<std::endl;
+}
+
+void get_rows_cols_check()
+{
+    std::cout << "----------------------------------------------" << std::endl;
+    std::cout << "get rows:" << std::endl;
+    const int rows = 2, cols = 3;
+    Matrix <int> mat_1 (rows, cols);
+    Matrix <int> mat_2 (rows, cols);
+    std::cout << "first mat number of rows: " << mat_1.get_rows() << std::endl
+                  << "second mat number of rows: " << mat_2.get_rows() << std::endl << std::endl;
+    if (mat_1.get_rows() != mat_2.get_rows()) {
+        std::cerr << "get rows error." << std::endl;
+    }
+    std::cout << "get cols:" << std::endl;
+    std::cout << "first mat number of cols: " << mat_1.get_cols() << std::endl
+                  << "second mat number of cols: " << mat_2.get_cols() << std::endl << std::endl;
+    if (mat_1.get_cols() != mat_2.get_cols()) {
+        std::cerr << "get cols error." << std::endl;
+    }
+
+    std::cout << "trying empty matrix" << std::endl;
+    Matrix <int> mat;
+    std::cout << "matrix number of rows, cols: " << mat.get_rows() << ", " << mat.get_cols() << std::endl;
+}
+
+void set_elem_check()
+{
+    std::cout << "----------------------------------------------" << std::endl;
+    std::cout << "set elem:" << std::endl;
+    const int elem = 89;
+    const int ind_r = 0;
+    const int ind_c = 1;
+    Matrix <int> matrix ({{1, 2, 3}, {4, 5, 6}});
+    std::cout << "initial matrix: " << matrix;
+    matrix.set_elem(ind_r, ind_c, elem);
+    std::cout << "changed matrix: " << matrix;
+    std::cout<<std::endl;
+    std::cout << "expected element: " << elem << std::endl << "actual element: " << matrix(ind_r, ind_c) << std::endl;
+    std::cout<<std::endl;
+    std::cout << "trying index for rows: " << matrix.get_rows()+5 << std::endl;
+    try {
+        matrix.set_elem(matrix.get_rows()+5, ind_c, elem);
+    } catch (Exceptions &ex) {
+        std::cout << ex << std::endl;
+    }
+    std::cout << "trying index for cols: " << matrix.get_cols()+5 << std::endl;
+    try {
+        matrix.set_elem(ind_r, matrix.get_cols()+5, elem);
+    } catch (Exceptions &ex) {
+        std::cout << ex << std::endl;
+    }
 }

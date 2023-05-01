@@ -21,6 +21,8 @@ void operator_mat_div_num();
 void operator_mat_mult_num();
 void get_elem_check();
 void is_square_check();
+void get_rows_cols_check();
+void set_elem_check();
 
 
 #endif // TEST_H
