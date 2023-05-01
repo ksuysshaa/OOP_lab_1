@@ -5,7 +5,7 @@ void tests()
     length_constructor_check();
     copy_constructor_check();
     init_list_constructor_check();
-
+    //move_constructor_check();
     operator_equal_check();
     operator_equal_sum_check();
     operator_equal_diff_check();
@@ -171,17 +171,27 @@ void operator_equal_sum_check()
     std::cout << "operator +=:" << std::endl;
     Matrix <int> init_matrix ({{1, 2, 3}, {4, 5, 6}});
     std::cout << "initial matrix: " << init_matrix;
+    Matrix <int> temp_matrix (init_matrix);
     Matrix <int> sum_matrix ({{7, -5, 29}, {2, 4, 7}});
     std::cout << "second matrix: " << sum_matrix;
     init_matrix += sum_matrix;
     std::cout << "equal sum matrix: " << init_matrix << std::endl;
+    for (int i = 0; i<init_matrix.get_rows(); i++)
+        for (int j = 0; j<init_matrix.get_cols(); j++)
+            if (init_matrix(i,j) != temp_matrix(i,j)+sum_matrix(i,j))
+                std::cerr << "operator += error." << std::endl;
 
-    std::cout << "trying += equal matrix: " << init_matrix << std::endl;
-    std::cout << "initial matrix: " << init_matrix;
+    std::cout << "trying += equal matrix: " << std::endl;
+    std::cout << "initial matrix: " << temp_matrix;
+    Matrix <int> t_temp_matrix (temp_matrix);
     Matrix <int> sec_matrix ({{1, 2, 3}, {4, 5, 6}});
     std::cout << "second matrix: " << sec_matrix;
-    init_matrix += sec_matrix;
-    std::cout << "equal sum matrix: " << init_matrix << std::endl;
+    temp_matrix += sec_matrix;
+    std::cout << "equal sum matrix: " << temp_matrix << std::endl;
+    for (int i = 0; i<init_matrix.get_rows(); i++)
+        for (int j = 0; j<init_matrix.get_cols(); j++)
+            if (temp_matrix(i,j) != t_temp_matrix(i,j)+sec_matrix(i,j))
+                std::cerr << "operator += error." << std::endl;
 
     std::cout << "trying to += matrix with different sizes:" << std::endl;
     try {
@@ -202,8 +212,6 @@ void operator_equal_sum_check()
     } catch (Exceptions &ex){
         std::cout << ex << std::endl;
     }
-
-
 }
 
 void operator_equal_diff_check()
@@ -212,9 +220,46 @@ void operator_equal_diff_check()
     std::cout << "operator -=:" << std::endl;
     Matrix <int> init_matrix ({{1, 2, 3}, {4, 5, 6}});
     std::cout << "initial matrix: " << init_matrix;
-    Matrix <int> min_matrix ({{4, 5, 6}, {1, 2, 3}});
+    Matrix <int> temp_matrix (init_matrix);
+    Matrix <int> min_matrix ({{7, -5, 29}, {2, 4, 7}});
     init_matrix -= min_matrix;
     std::cout << "equal diff matrix: " << init_matrix << std::endl;
+    for (int i = 0; i<init_matrix.get_rows(); i++)
+        for (int j = 0; j<init_matrix.get_cols(); j++)
+            if (init_matrix(i,j) != temp_matrix(i,j)-min_matrix(i,j))
+                std::cerr << "operator -= error." << std::endl;
+
+    std::cout << "trying -= equal matrix: " << std::endl;
+    std::cout << "initial matrix: " << temp_matrix;
+    Matrix <int> t_temp_matrix (temp_matrix);
+    Matrix <int> sec_matrix ({{1, 2, 3}, {4, 5, 6}});
+    std::cout << "second matrix: " << sec_matrix;
+    temp_matrix -= sec_matrix;
+    std::cout << "equal sum matrix: " << temp_matrix << std::endl;
+    for (int i = 0; i<init_matrix.get_rows(); i++)
+        for (int j = 0; j<init_matrix.get_cols(); j++)
+            if (temp_matrix(i,j) != t_temp_matrix(i,j)-sec_matrix(i,j))
+                std::cerr << "operator += error." << std::endl;
+
+    std::cout << "trying to -= matrix with different sizes:" << std::endl;
+    try {
+        Matrix <int> matr (1,1);
+        std::cout << "first matrix number of rows and cols: "<< matr.get_rows() << " " << matr.get_cols() << std::endl;
+        std::cout << "second matrix number of rows and cols: "<< min_matrix.get_rows() << " " << min_matrix.get_cols() << std::endl;
+        matr -= min_matrix;
+        std::cout << matr << std::endl;
+    } catch (Exceptions &ex){
+        std::cout << ex << std::endl;
+    }
+
+    std::cout << "trying to -= empty matrix to matrix:" << std::endl;
+    try {
+        Matrix <int> matr;
+        init_matrix -= matr;
+        std::cout << init_matrix << matr <<  std::endl;
+    } catch (Exceptions &ex){
+        std::cout << ex << std::endl;
+    }
 }
 
 void operator_plus()
