@@ -17,6 +17,7 @@ private:
     void alloc_memory();
 public:
     explicit Matrix(int n, int m);
+    Matrix();
     ~Matrix();
     Matrix(const Matrix<T>& mat);
     Matrix (Matrix<T>&& mat);
@@ -91,15 +92,12 @@ Matrix <T>::Matrix(const Matrix<T>& mat) //конструктор копиров
 }
 
 template <typename T> //конструктор перемещения
-Matrix <T>::Matrix (Matrix<T>&& mat)
+Matrix <T>::Matrix(Matrix<T>&& mat)
 {
-    data = mat.data;
     rows = mat.rows;
     cols = mat.cols;
-    for (int i = 0; i<rows; i++)
-        mat.data[i] = nullptr;
+    data = mat.data;
     mat.data = nullptr;
-    printf("dsjjss");
 }
 
 template <typename T>
@@ -196,11 +194,8 @@ T& Matrix <T>::get_elem (unsigned int i, unsigned int j)
 }
 
 template <typename T>
-Matrix<T>& Matrix <T>::operator = (const Matrix<T>& mat)
+Matrix<T>& Matrix <T>::operator = (const Matrix<T>& mat) //перегрузка оператора присваивания
 {
-//    for (int i = 0; i< rows; i++)
-//        delete[] data[i];
-//    delete[] data;
     if (rows != mat.get_rows() || cols != mat.get_cols())
         throw Exceptions ("different size of matrix.");
     alloc_memory();
@@ -296,5 +291,13 @@ Matrix<T> Matrix <T>::operator /(double num)
         for (int j = 0; j<new_mat.get_cols(); j++)
             new_mat.data[i][j] /= num;
     return new_mat;
+}
+
+template <typename T>
+Matrix <T>::Matrix()
+{
+    rows = 0;
+    cols = 0;
+    data = nullptr;
 }
 #endif // MATRIX_H
