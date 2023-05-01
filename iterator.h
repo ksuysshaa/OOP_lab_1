@@ -35,16 +35,21 @@ Iterator <T>::Iterator(Matrix <T> &container_obj, size_t rows, size_t cols):mat(
 template <typename T>
 Iterator <T> Iterator<T>::next()
 {
-    it_r++;
-    it_c++;
-    return **this;
+    if (!(this->is_end())){
+        if ((it_c == mat.get_cols()-1)) {
+            it_r++;
+            it_c = 0;
+        } else
+            it_c++;
+    }
+    return *this;
 }
 
 template <typename T>
 bool Iterator <T>::is_end()
 {
     bool result;
-    if (it_r == mat.get_rows() && it_c == mat.get_cols())
+    if (it_r == mat.get_rows() && it_c == 0)
         result = true;
     return result;
 }
@@ -61,14 +66,14 @@ bool Iterator<T>::is_begin()
 template <typename T>
 T Iterator <T>::value()
 {
-    return ***this;
+    return **this;
 }
 
 template <typename T>
 Iterator<T> & Iterator<T>::operator++()
 {
     if (!(this->is_end())){
-        if ((it_c == mat.get_cols()-1)) {
+        if (it_c == mat.get_cols()-1) {
             it_r++;
             it_c = 0;
         } else

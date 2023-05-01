@@ -22,6 +22,9 @@ void tests()
     set_elem_check();
 
     iterator_begin_end_check();
+    iterator_next_increment_check();
+    iterator_value_check();
+    iterator_operators_check();
 
     move_constructor_check();
 }
@@ -475,8 +478,95 @@ void iterator_begin_end_check()
     Matrix <int> matrix ({{1, 2, 3}, {4, 5, 6}});
     Iterator <int> it_1 = matrix.iterator_begin();
     it_1.is_begin() ? std::cout << "test passed" << std::endl : std::cout << "test not passed. iterator begin error." << std::endl;
+    std::cout << std::endl;
 
     std::cout << "iterator end:" << std::endl;
     Iterator <int> it_2 = matrix.iterator_end();
     it_2.is_end() ? std::cout << "test passed" << std::endl : std::cout << "test not passed. iterator end error." << std::endl;
+}
+
+void iterator_next_increment_check()
+{
+    std::cout << "----------------------------------------------" << std::endl;
+    std::cout << "iterator next:" << std::endl;
+    Matrix <int> matrix ({{1, 2, 3}, {4, 5, 6}});
+    Iterator <int> it = matrix.iterator_begin();
+    bool flag = true;
+    for (int i = 0; i<matrix.get_rows(); i++){
+        for (int j = 0; j<matrix.get_cols(); j++){
+            if (matrix(i,j) != *it){
+                std::cerr << "iterator next error.";
+                flag = false;
+            }
+            it.next();
+        }
+    }
+    flag ? std::cout << "test passed" << std::endl : std::cout << "test not passed" << std::endl;
+
+    std::cout << std::endl;
+    std::cout << "iterator increment:" << std::endl;
+    flag = true;
+    Iterator <int> it_1 = matrix.iterator_begin();
+    for (int i = 0; i<matrix.get_rows(); i++){
+        for (int j = 0; j<matrix.get_cols(); j++){
+            if (matrix(i,j) != *it_1){
+                std::cerr << "iterator next error.";
+                flag = false;
+            }
+            ++it_1;
+        }
+    }
+    flag ? std::cout << "test passed" << std::endl : std::cout << "test not passed" << std::endl;
+}
+
+void iterator_value_check()
+{
+    std::cout << "----------------------------------------------" << std::endl;
+    std::cout << "iterator value:" << std::endl;
+    Matrix <int> matrix ({{1, 2, 3}, {4, 5, 6}});
+    Iterator <int> it = matrix.iterator_begin();
+    bool flag = true;
+    while (!it.is_end()) {
+        if (*it != it.value()) {
+            std::cerr << "iterator value error.";
+            flag = false;
+        } else
+            std::cout << it.value() << " ";
+        ++it;
+    }
+    flag ? std::cout << "test passed" << std::endl : std::cout << "test not passed" << std::endl;
+
+    std::cout << std::endl;
+    std::cout << "iterator operator *:" << std::endl;
+    Iterator <int> it_1 = matrix.iterator_begin();
+    flag = true;
+    while (!it_1.is_end()) {
+        if (*it_1 != it_1.value()) {
+            std::cerr << "iterator value error.";
+            flag = false;
+        } else
+            std::cout << *it_1 << " ";
+        ++it_1;
+    }
+    flag ? std::cout << "test passed" << std::endl : std::cout << "test not passed" << std::endl;
+}
+
+void iterator_operators_check()
+{
+    std::cout << "----------------------------------------------" << std::endl;
+    std::cout << "iterator operators == and !=:" << std::endl;
+    Matrix <int> matrix ({{1, 2, 3}, {4, 5, 6}});
+    Iterator <int> it_1 = matrix.iterator_begin();
+    Iterator <int> it_2 = matrix.iterator_begin();
+    bool flag = true;
+    for (; !it_1.is_end() && !it_2.is_end();) {
+        if (*it_1 == *it_2) {
+        } else if (*it_1 != *it_2){
+            std::cerr << "iterator operators error.";
+            flag = false;
+        }
+        ++it_1;
+        ++it_2;
+    }
+    flag ? std::cout << "test passed" << std::endl : std::cout << "test not passed" << std::endl;
 }

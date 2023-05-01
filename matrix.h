@@ -49,7 +49,7 @@ public:
     friend std::ostream& operator <<(std::ostream& os, const Matrix<_T>& mat);
 
     Iterator<T> iterator_begin() {return Iterator<T>(*this, 0, 0);};
-    Iterator<T> iterator_end() {return Iterator<T>(*this, get_rows(), get_cols());};
+    Iterator<T> iterator_end() {return Iterator<T>(*this, get_rows(), 0);};
 };
 
 template <typename T> //выделение памяти - вспомогательная функция

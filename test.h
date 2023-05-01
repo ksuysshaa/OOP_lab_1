@@ -25,5 +25,8 @@ void is_square_check();
 void get_rows_cols_check();
 void set_elem_check();
 void iterator_begin_end_check();
+void iterator_next_increment_check();
+void iterator_value_check();
+void iterator_operators_check();
 
 #endif // TEST_H
