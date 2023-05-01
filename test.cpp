@@ -16,6 +16,9 @@ void tests()
     operator_mat_minus_num();
     operator_mat_div_num();
     operator_mat_mult_num();
+
+    get_elem_check();
+    is_square_check();
     move_constructor_check();
 }
 
@@ -235,7 +238,7 @@ void operator_equal_diff_check()
     Matrix <int> sec_matrix ({{1, 2, 3}, {4, 5, 6}});
     std::cout << "second matrix: " << sec_matrix;
     temp_matrix -= sec_matrix;
-    std::cout << "equal sum matrix: " << temp_matrix << std::endl;
+    std::cout << "equal diff matrix: " << temp_matrix << std::endl;
     for (int i = 0; i<init_matrix.get_rows(); i++)
         for (int j = 0; j<init_matrix.get_cols(); j++)
             if (temp_matrix(i,j) != t_temp_matrix(i,j)-sec_matrix(i,j))
@@ -267,10 +270,16 @@ void operator_plus()
     std::cout << "----------------------------------------------" << std::endl;
     std::cout << "operator +:" << std::endl;
     Matrix <int> init_matrix ({{1, 2, 3}, {4, 5, 6}});
-    std::cout << "initial matrix: " << init_matrix;
-    Matrix <int> sec_matrix ({{4, 5, 6}, {1, 2, 3}});
+    Matrix <int> sec_matrix ({{7, -5, 29}, {2, 4, 7}});
+    std::cout << "initial matrix: " << init_matrix << "second matrix" << sec_matrix;
     Matrix <int> res_matrix = init_matrix + sec_matrix;
     std::cout << "result matrix: " << res_matrix << std::endl;
+    for (int i = 0; i<init_matrix.get_rows(); i++)
+        for (int j = 0; j<init_matrix.get_cols(); j++)
+            if (res_matrix(i,j) != sec_matrix(i,j)+init_matrix(i,j))
+                std::cerr << "operator + error." << std::endl;
+
+
 }
 
 void operator_minus()
@@ -337,4 +346,68 @@ void operator_mat_mult_num()
     double a = 5.2;
     Matrix <double> res_matrix = init_matrix * a;
     std::cout << "result matrix: " << res_matrix << std::endl;
+}
+
+void get_elem_check()
+{
+    std::cout << "----------------------------------------------" << std::endl;
+    std::cout << "get elem:" << std::endl;
+    Matrix <int> init_matrix ({{1, 2, 3}, {4, 5, 6}});
+    std::cout << "initial matrix: " << init_matrix;
+    const int ind_r = 1, ind_c = 1;
+    std::cout << "expected elem: " << init_matrix(ind_r, ind_c) << std::endl << "actual elem: " << init_matrix.get_elem(ind_r,ind_c) << std::endl;
+    if (init_matrix(ind_r, ind_c) != init_matrix.get_elem(ind_r,ind_c))
+            std::cerr << "get elem error." << std::endl;
+    std::cout << "trying index for rows: " << -ind_r << std::endl;
+    try {
+        std::cout << init_matrix.get_elem(-ind_r, ind_c) <<std::endl;
+    } catch (Exceptions &ex) {
+        std::cout << ex << std::endl;
+    }
+    std::cout << "trying index for cols: " << -ind_c << std::endl;
+    try {
+        std::cout << init_matrix.get_elem(ind_r, -ind_c) <<std::endl;
+    } catch (Exceptions &ex) {
+        std::cout << ex << std::endl;
+    }
+
+    std::cout << "----------------------------------------------" << std::endl;
+    std::cout << "operator ():" << std::endl;
+    std::cout << "initial matrix: " << init_matrix;
+    const int ind_r_2 = 0, ind_c_2 = 0;
+    std::cout << "expected elem: " << init_matrix.get_elem(ind_r_2, ind_c_2) << std::endl << "actual elem: " << init_matrix(ind_r_2,ind_c_2) << std::endl;
+    if (init_matrix(ind_r_2, ind_c_2) != init_matrix.get_elem(ind_r_2,ind_c_2))
+            std::cerr << "get elem error." << std::endl;
+    std::cout << "trying index for rows: " << init_matrix.get_rows()+5 << std::endl;
+    try {
+        std::cout << init_matrix.get_elem(init_matrix.get_rows()+5, ind_c_2) <<std::endl;
+    } catch (Exceptions &ex) {
+        std::cout << ex << std::endl;
+    }
+    std::cout << "trying index for cols: " << init_matrix.get_cols()+5 << std::endl;
+    try {
+        std::cout << init_matrix.get_elem(ind_r, init_matrix.get_cols()+5) <<std::endl;
+    } catch (Exceptions &ex) {
+        std::cout << ex << std::endl;
+    }
+}
+
+void is_square_check()
+{
+    std::cout << "----------------------------------------------" << std::endl;
+    std::cout << "is square:" << std::endl;
+    Matrix <int> init_matrix ({{1, 2, 3}, {4, 5, 6}, {7, 8, 9}});
+    std::cout << "squared matrix: " << init_matrix;
+    if (init_matrix.is_square())
+        std::cout<<"matrix is a square."<<std::endl;
+    else
+        std::cout<<"matrix is not a square."<<std::endl;
+
+    std::cout << std::endl;
+    Matrix <int> matrix ({{1, 2, 3}, {4, 5, 6}});
+    std::cout << "not squared matrix: " << matrix;
+    if (matrix.is_square())
+        std::cout<<"matrix is a square."<<std::endl;
+    else
+        std::cout<<"matrix is not a square."<<std::endl;
 }

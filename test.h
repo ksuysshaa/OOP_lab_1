@@ -19,6 +19,8 @@ void operator_mat_plus_num();
 void operator_mat_minus_num();
 void operator_mat_div_num();
 void operator_mat_mult_num();
+void get_elem_check();
+void is_square_check();
 
 
 #endif // TEST_H
