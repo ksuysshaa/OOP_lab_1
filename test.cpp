@@ -5,17 +5,20 @@ void tests()
     length_constructor_check();
     copy_constructor_check();
     init_list_constructor_check();
-    //move_constructor_check();
+//    move_constructor_check();
     operator_equal_check();
     operator_equal_sum_check();
     operator_equal_diff_check();
+
     operator_plus();
     operator_minus();
     operator_mult();
+
     operator_mat_plus_num();
     operator_mat_minus_num();
     operator_mat_div_num();
     operator_mat_mult_num();
+
     get_elem_check();
     get_rows_cols_check();
     is_square_check();
@@ -96,9 +99,9 @@ void move_constructor_check() //??? программа заканчиваетс�
 
     std::cout << "trying empty matrix: " << std::endl;
     try {
-        Matrix <int> init_matrix (1,1);
+        Matrix <int> init_matrix;
         Matrix <int> moved_matrix (std::move(init_matrix));
-        std::cout << "moved matrix: " << moved_matrix << std::endl;
+        std::cout << moved_matrix << std::endl;
     } catch (Exceptions &ex) {
         std::cout << ex<< std::endl;
     }
@@ -115,7 +118,7 @@ void init_list_constructor_check()
     for (auto i : lst) {
         ind_j = 0;
         for (auto j : i){
-            std::cout << j << " ";
+            std::cout << j << "\t";
             ind_j ++;
         }
         ind_i++;
@@ -222,6 +225,16 @@ void operator_equal_sum_check()
     } catch (Exceptions &ex){
         std::cout << ex << std::endl;
     }
+
+    std::cout << "trying to += empty matrix to empty matrix:" << std::endl;
+    try {
+        Matrix <int> matr;
+        Matrix <int> sec_matr;
+        sec_matr += matr;
+        std::cout << sec_matr << matr <<  std::endl;
+    } catch (Exceptions &ex){
+        std::cout << ex << std::endl;
+    }
 }
 
 void operator_equal_diff_check()
@@ -262,11 +275,21 @@ void operator_equal_diff_check()
         std::cout << ex << std::endl;
     }
 
-    std::cout << "trying to -= empty matrix to matrix:" << std::endl;
+    std::cout << "trying to -= empty matrix from matrix:" << std::endl;
     try {
         Matrix <int> matr;
         init_matrix -= matr;
         std::cout << init_matrix << matr <<  std::endl;
+    } catch (Exceptions &ex){
+        std::cout << ex << std::endl;
+    }
+
+    std::cout << "trying to -= empty matrix from empty matrix:" << std::endl;
+    try {
+        Matrix <int> matr;
+        Matrix <int> sec_matr;
+        sec_matr -= matr;
+        std::cout << sec_matr << matr <<  std::endl;
     } catch (Exceptions &ex){
         std::cout << ex << std::endl;
     }
@@ -286,7 +309,35 @@ void operator_plus()
             if (res_matrix(i,j) != sec_matrix(i,j)+init_matrix(i,j))
                 std::cerr << "operator + error." << std::endl;
 
+    std::cout << "trying to + matrix with different sizes:" << std::endl;
+    try {
+        Matrix <int> matr (1,1);
+        std::cout << "first matrix number of rows and cols: "<< matr.get_rows() << " " << matr.get_cols() << std::endl;
+        std::cout << "second matrix number of rows and cols: "<< sec_matrix.get_rows() << " " << sec_matrix.get_cols() << std::endl;
+        Matrix <int> res_matrix = init_matrix - sec_matrix;
+        std::cout << res_matrix << std::endl;
+    } catch (Exceptions &ex){
+        std::cout << ex << std::endl;
+    }
 
+    std::cout << "trying to + empty matrix to matrix:" << std::endl;
+    try {
+        Matrix <int> matr;
+        Matrix <int> res_matrix = init_matrix + matr;
+        std::cout << res_matrix <<  std::endl;
+    } catch (Exceptions &ex){
+        std::cout << ex << std::endl;
+    }
+
+    std::cout << "trying to + empty matrix to empty matrix:" << std::endl;
+    try {
+        Matrix <int> matr;
+        Matrix <int> sec_matr;
+        Matrix <int> res_matrix = sec_matr + matr;
+        std::cout << res_matrix <<  std::endl;
+    } catch (Exceptions &ex){
+        std::cout << ex << std::endl;
+    }
 }
 
 void operator_minus()
@@ -294,10 +345,40 @@ void operator_minus()
     std::cout << "----------------------------------------------" << std::endl;
     std::cout << "operator -:" << std::endl;
     Matrix <int> init_matrix ({{1, 2, 3}, {4, 5, 6}});
-    std::cout << "initial matrix: " << init_matrix;
     Matrix <int> sec_matrix ({{4, 5, 6}, {1, 2, 3}});
+    std::cout << "initial matrix: " << init_matrix << "second matrix" << sec_matrix;
     Matrix <int> res_matrix = init_matrix - sec_matrix;
     std::cout << "result matrix: " << res_matrix << std::endl;
+
+    std::cout << "trying to - matrix with different sizes:" << std::endl;
+    try {
+        Matrix <int> matr (1,1);
+        std::cout << "first matrix number of rows and cols: "<< matr.get_rows() << " " << matr.get_cols() << std::endl;
+        std::cout << "second matrix number of rows and cols: "<< sec_matrix.get_rows() << " " << sec_matrix.get_cols() << std::endl;
+        Matrix <int> res_matrix = init_matrix - sec_matrix;
+        std::cout << res_matrix << std::endl;
+    } catch (Exceptions &ex){
+        std::cout << ex << std::endl;
+    }
+
+    std::cout << "trying to - empty matrix from matrix:" << std::endl;
+    try {
+        Matrix <int> matr;
+        Matrix <int> res_matrix = init_matrix - matr;
+        std::cout << res_matrix <<  std::endl;
+    } catch (Exceptions &ex){
+        std::cout << ex << std::endl;
+    }
+
+    std::cout << "trying to - empty matrix from empty matrix:" << std::endl;
+    try {
+        Matrix <int> matr;
+        Matrix <int> sec_matr;
+        Matrix <int> res_matrix = sec_matr - matr;
+        std::cout << res_matrix <<  std::endl;
+    } catch (Exceptions &ex){
+        std::cout << ex << std::endl;
+    }
 }
 
 void operator_mult()
@@ -305,54 +386,132 @@ void operator_mult()
     std::cout << "----------------------------------------------" << std::endl;
     std::cout << "operator *:" << std::endl;
     Matrix <int> init_matrix ({{1, 2, 3}, {4, 5, 6}});
-    std::cout << "initial matrix: " << init_matrix;
     Matrix <int> sec_matrix ({{4, 5, 6}, {1, 2, 3}});
+    std::cout << "initial matrix: " << init_matrix << "second matrix: " << sec_matrix;
     Matrix <int> res_matrix = init_matrix * sec_matrix;
     std::cout << "result matrix: " << res_matrix << std::endl;
+
+    std::cout << "trying to - matrix with different sizes:" << std::endl;
+    try {
+        Matrix <int> matr (1,1);
+        std::cout << "first matrix number of rows and cols: "<< matr.get_rows() << " " << matr.get_cols() << std::endl;
+        std::cout << "second matrix number of rows and cols: "<< sec_matrix.get_rows() << " " << sec_matrix.get_cols() << std::endl;
+        Matrix <int> res_matrix = init_matrix * sec_matrix;
+        std::cout << res_matrix << std::endl;
+    } catch (Exceptions &ex){
+        std::cout << ex << std::endl;
+    }
+
+    std::cout << "trying to * empty matrix on matrix:" << std::endl;
+    try {
+        Matrix <int> matr;
+        Matrix <int> res_matrix = init_matrix * matr;
+        std::cout << res_matrix <<  std::endl;
+    } catch (Exceptions &ex){
+        std::cout << ex << std::endl;
+    }
+
+    std::cout << "trying to * empty matrix on empty matrix:" << std::endl;
+    try {
+        Matrix <int> matr;
+        Matrix <int> sec_matr;
+        Matrix <int> res_matrix = sec_matr - matr;
+        std::cout << res_matrix <<  std::endl;
+    } catch (Exceptions &ex){
+        std::cout << ex << std::endl;
+    }
 }
 
 void operator_mat_plus_num()
 {
     std::cout << "----------------------------------------------" << std::endl;
-    std::cout << "operator + for matrix and number:" << std::endl;
-    Matrix <double> init_matrix ({{1, 2, 3}, {4, 5, 6}});
-    std::cout << "initial matrix: " << init_matrix;
+    std::cout << "operator + for matrix and number:" << std::endl <<std::endl;
     double a = 5.2;
+    Matrix <double> init_matrix ({{1.8, 2.5, 3.98}, {4.1, 5, 6.92}});
+    std::cout << "trying to + num to double matrix:" << std::endl;
+    std::cout << "initial matrix: " << init_matrix << "number: " << a << std::endl;
     Matrix <double> res_matrix = init_matrix + a;
     std::cout << "result matrix: " << res_matrix << std::endl;
+
+    Matrix <int> init_int_matrix ({{1, 2, 3}, {4, 5, 6}});
+    std::cout << "trying to + num to int matrix:" << std::endl;
+    std::cout << "initial matrix: " << init_int_matrix << "number: " << a << std::endl;
+    Matrix <int> res_int_matrix = init_int_matrix + a;
+    std::cout << "result matrix: " << res_int_matrix << std::endl;
 }
 
 void operator_mat_minus_num()
 {
     std::cout << "----------------------------------------------" << std::endl;
     std::cout << "operator - for matrix and number:" << std::endl;
-    Matrix <double> init_matrix ({{1, 2, 3}, {4, 5, 6}});
-    std::cout << "initial matrix: " << init_matrix;
     double a = 5.2;
+    Matrix <double> init_matrix ({{1.8, 2.5, 3.98}, {4.1, 5, 6.92}});
+    std::cout << "initial matrix: " << init_matrix << "number: " << a<< std::endl;
+    std::cout << "trying to - num from double matrix:" << std::endl;
     Matrix <double> res_matrix = init_matrix - a;
     std::cout << "result matrix: " << res_matrix << std::endl;
+
+    Matrix <int> init_int_matrix ({{1, 2, 3}, {4, 5, 6}});
+    std::cout << "trying to + num to int matrix:" << std::endl;
+    std::cout << "initial matrix: " << init_int_matrix << "number: " << a << std::endl;
+    Matrix <int> res_int_matrix = init_int_matrix - a;
+    std::cout << "result matrix: " << res_int_matrix << std::endl;
 }
 
 void operator_mat_div_num()
 {
     std::cout << "----------------------------------------------" << std::endl;
     std::cout << "operator / for matrix and number:" << std::endl;
-    Matrix <double> init_matrix ({{1, 2, 3}, {4, 5, 6}});
-    std::cout << "initial matrix: " << init_matrix;
     double a = 5.2;
+    Matrix <double> init_matrix ({{-1.8, 2.5, 3.98}, {4.1, -5, 6.92}});
+    std::cout << "initial matrix: " << init_matrix << "number: " << a<< std::endl;
+    std::cout << "trying double matrix / num:" << std::endl;
     Matrix <double> res_matrix = init_matrix / a;
     std::cout << "result matrix: " << res_matrix << std::endl;
+
+    Matrix <int> init_int_matrix ({{1, 2, 3}, {4, 5, 6}});
+    std::cout << "trying int matrix / num:" << std::endl;
+    std::cout << "initial matrix: " << init_int_matrix << "number: " << a << std::endl;
+    Matrix <int> res_int_matrix = init_int_matrix / a;
+    std::cout << "result matrix: " << res_int_matrix << std::endl;
+
+    std::cout << "trying int matrix / 0:" << std::endl;
+    try {
+        double b = 0;
+        std::cout << "initial matrix: " << init_int_matrix << "number: " << b << std::endl;
+        Matrix <int> res_int_matrix = init_int_matrix / b;
+        std::cout << "result matrix: " << res_int_matrix << std::endl;
+    } catch (Exceptions &ex) {
+        std::cout << ex << std::endl;
+    }
 }
 
 void operator_mat_mult_num()
 {
     std::cout << "----------------------------------------------" << std::endl;
     std::cout << "operator * for matrix and number:" << std::endl;
+    double a = -5.2;
     Matrix <double> init_matrix ({{1, 2, 3}, {4, 5, 6}});
-    std::cout << "initial matrix: " << init_matrix;
-    double a = 5.2;
+    std::cout << "initial matrix: " << init_matrix << "number: " << a << std::endl;
+    std::cout << "trying double matrix * num:" << std::endl;
     Matrix <double> res_matrix = init_matrix * a;
     std::cout << "result matrix: " << res_matrix << std::endl;
+
+    Matrix <int> init_int_matrix ({{1, 2, 3}, {4, 5, 6}});
+    std::cout << "trying int matrix * num:" << std::endl;
+    std::cout << "initial matrix: " << init_int_matrix << "number: " << a << std::endl;
+    Matrix <int> res_int_matrix = init_int_matrix / a;
+    std::cout << "result matrix: " << res_int_matrix << std::endl;
+
+    std::cout << "trying int matrix * 0:" << std::endl;
+    try {
+        double b = 0;
+        std::cout << "initial matrix: " << init_int_matrix << "number: " << b << std::endl;
+        Matrix <int> res_int_matrix = init_int_matrix * b;
+        std::cout << "result matrix: " << res_int_matrix << std::endl;
+    } catch (Exceptions &ex) {
+        std::cout << ex << std::endl;
+    }
 }
 
 void get_elem_check()

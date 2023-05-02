@@ -16,12 +16,13 @@ private:
     T **data;
     void alloc_memory();
 public:
-    explicit Matrix(int n, int m);
+    //конструкторы
     Matrix();
-    ~Matrix();
+    explicit Matrix(int n, int m);
     Matrix(const Matrix<T>& mat);
     Matrix (Matrix<T>&& mat);
     explicit Matrix(std::initializer_list < std::initializer_list < T >> lst);
+    ~Matrix();
 
     int get_rows() const;
     int get_cols() const;
@@ -32,22 +33,27 @@ public:
     T& operator () (unsigned int i, unsigned int j);
     T& get_elem (unsigned int i, unsigned int j);
 
+    //перегрузка операторов
     Matrix<T>& operator = (const Matrix<T>&mat);
     Matrix<T>& operator +=(const Matrix<T>&mat);
     Matrix<T>& operator -=(const Matrix<T>&mat);
 
+    //перегрузка операторов для двух матриц
     Matrix<T> operator +(const Matrix<T>& mat);
     Matrix<T> operator -(const Matrix<T>& mat);
     Matrix<T> operator *(const Matrix<T>& mat);
 
+    //перегрузка операторов для матрицы и числа
     Matrix<T> operator +(double num);
     Matrix<T> operator -(double num);
     Matrix<T> operator *(double num);
     Matrix<T> operator /(double num);
 
+    //перегрузка оператора вывода
     template <typename _T>
     friend std::ostream& operator <<(std::ostream& os, const Matrix<_T>& mat);
 
+    //итераторы
     Iterator<T> iterator_begin() {return Iterator<T>(*this, 0, 0);};
     Iterator<T> iterator_end() {return Iterator<T>(*this, get_rows(), 0);};
 };
@@ -127,26 +133,26 @@ Matrix <T>::Matrix(std::initializer_list<std::initializer_list< T>> lst) //ко�
 }
 
 template <typename T>
-Matrix <T>::~Matrix()
+Matrix <T>::~Matrix() //деструктор
 {
     for (int i = 0; i< rows; i++)
         delete[] data[i];
     delete[] data;
 }
 
-template <typename T>
+template <typename T> //метод получения числа столбцов матрицы
 int Matrix <T>::get_cols() const
 {
     return cols;
 }
 
-template <typename T>
+template <typename T> //метод получения числа строк матрицы
 int Matrix <T>::get_rows() const
 {
     return rows;
 }
 
-template <typename T>
+template <typename T> //метод проверки матрицы на квадратную
 bool Matrix <T>::is_square()
 {
     bool result;
@@ -156,21 +162,21 @@ bool Matrix <T>::is_square()
 }
 
 template <typename _T>
-std::ostream& operator <<(std::ostream& os, const Matrix<_T>& mat)
+std::ostream& operator <<(std::ostream& os, const Matrix<_T>& mat) //перегрузка оператора <<
 {
     if (mat.get_rows() == 0 || mat.get_cols() == 0)
         throw Exceptions ("matrix is null.");
     for (int i = 0; i<mat.get_rows(); i++) {
         os << "\n";
         for (int j = 0; j<mat.get_cols(); j++)
-            os << mat.data[i][j] << " ";
+            os << mat.data[i][j] << "\t";
     }
     os << "\n";
     return os;
 }
 
 template <typename T>
-void Matrix <T>::set_elem (unsigned int i, unsigned j, const T& elem)
+void Matrix <T>::set_elem (unsigned int i, unsigned j, const T& elem) //метод изменения элемента матрицы по индексу
 {
     if (i < 0 || i >= get_rows() || j < 0 || j >= get_cols())
         throw Exceptions ("incorrect index");
@@ -178,7 +184,7 @@ void Matrix <T>::set_elem (unsigned int i, unsigned j, const T& elem)
 }
 
 template <typename T>
-T& Matrix <T>::operator () (unsigned int i, unsigned int j)
+T& Matrix <T>::operator () (unsigned int i, unsigned int j) //метод получения элемента матрицы по индексу
 {
     if (i < 0 || i > get_rows() || j < 0 || j > get_cols())
         throw Exceptions ("incorrect index");
@@ -186,7 +192,7 @@ T& Matrix <T>::operator () (unsigned int i, unsigned int j)
 }
 
 template <typename T>
-T& Matrix <T>::get_elem (unsigned int i, unsigned int j)
+T& Matrix <T>::get_elem (unsigned int i, unsigned int j) //метод получения элемента матрицы по индексу
 {
     if (i < 0 || i > get_rows() || j < 0 || j > get_cols())
         throw Exceptions ("incorrect index");
@@ -206,7 +212,7 @@ Matrix<T>& Matrix <T>::operator = (const Matrix<T>& mat) //перегрузка 
 }
 
 template <typename T>
-Matrix<T>& Matrix<T>::operator +=(const Matrix<T>&mat)
+Matrix<T>& Matrix<T>::operator +=(const Matrix<T>&mat) //перегрузка оператора +=
 {
     if (rows != mat.get_rows() || cols != mat.get_cols())
         throw Exceptions ("different size of matrix.");
@@ -217,7 +223,7 @@ Matrix<T>& Matrix<T>::operator +=(const Matrix<T>&mat)
 }
 
 template <typename T>
-Matrix<T>& Matrix<T>::operator -= (const Matrix<T> &mat)
+Matrix<T>& Matrix<T>::operator -= (const Matrix<T> &mat) //перегрузка оператора -=
 {
     if (rows != mat.get_rows() || cols != mat.get_cols())
         throw Exceptions ("different size of matrix.");
@@ -228,7 +234,7 @@ Matrix<T>& Matrix<T>::operator -= (const Matrix<T> &mat)
 }
 
 template<typename T>
-Matrix<T> Matrix <T>::operator +(const Matrix<T>& mat)
+Matrix<T> Matrix <T>::operator +(const Matrix<T>& mat) //перегрузка оператора +
 {
     Matrix <T> new_mat(*this);
     new_mat += mat;
@@ -236,7 +242,7 @@ Matrix<T> Matrix <T>::operator +(const Matrix<T>& mat)
 }
 
 template<typename T>
-Matrix<T> Matrix <T>::operator -(const Matrix<T>& mat)
+Matrix<T> Matrix <T>::operator -(const Matrix<T>& mat) //перегрузка оператора -
 {
     Matrix <T> new_mat(*this);
     new_mat -= mat;
@@ -244,9 +250,11 @@ Matrix<T> Matrix <T>::operator -(const Matrix<T>& mat)
 }
 
 template<typename T>
-Matrix<T> Matrix <T>::operator *(const Matrix<T>& mat)
+Matrix<T> Matrix <T>::operator *(const Matrix<T>& mat) //перегрузка оператора *
 {
     Matrix <T> new_mat(*this);
+    if (rows != mat.get_rows() || cols != mat.get_cols())
+        throw Exceptions ("different size of matrix.");
     for (int i = 0; i<mat.get_rows(); i++)
         for (int j = 0; j<mat.get_cols(); j++)
             new_mat.data[i][j] *= mat.data[i][j];
@@ -254,17 +262,19 @@ Matrix<T> Matrix <T>::operator *(const Matrix<T>& mat)
 }
 
 template <typename T>
-Matrix<T> Matrix <T>::operator +(double num)
+Matrix<T> Matrix <T>::operator +(double num) //перегрузка оператора + с числом
 {
     Matrix <T> new_mat(*this);
-    for (int i = 0; i<new_mat.get_rows(); i++)
-        for (int j = 0; j<new_mat.get_cols(); j++)
+    for (int i = 0; i<new_mat.get_rows(); i++){
+        for (int j = 0; j<new_mat.get_cols(); j++) {
             new_mat.data[i][j] += num;
+        }
+    }
     return new_mat;
 }
 
 template <typename T>
-Matrix<T> Matrix <T>::operator -(double num)
+Matrix<T> Matrix <T>::operator -(double num) //перегрузка оператора - с числом
 {
     Matrix <T> new_mat(*this);
     for (int i = 0; i<new_mat.get_rows(); i++)
@@ -274,7 +284,7 @@ Matrix<T> Matrix <T>::operator -(double num)
 }
 
 template <typename T>
-Matrix<T> Matrix <T>::operator *(double num)
+Matrix<T> Matrix <T>::operator *(double num) //перегрузка оператора * с числом
 {
     Matrix <T> new_mat(*this);
     for (int i = 0; i<new_mat.get_rows(); i++)
@@ -284,16 +294,18 @@ Matrix<T> Matrix <T>::operator *(double num)
 }
 
 template <typename T>
-Matrix<T> Matrix <T>::operator /(double num)
+Matrix<T> Matrix <T>::operator /(double num) //перегрузка оператора / с числом
 {
     Matrix <T> new_mat(*this);
+    if (num == 0)
+        throw Exceptions ("division by zero is not allowed.");
     for (int i = 0; i<new_mat.get_rows(); i++)
         for (int j = 0; j<new_mat.get_cols(); j++)
             new_mat.data[i][j] /= num;
     return new_mat;
 }
 
-template <typename T>
+template <typename T>   //конструктор без параметров
 Matrix <T>::Matrix()
 {
     rows = 0;
