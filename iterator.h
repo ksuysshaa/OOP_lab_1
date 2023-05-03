@@ -1,7 +1,6 @@
 #ifndef ITERATOR_H
 #define ITERATOR_H
 
-#include <iostream>
 #include "matrix.h"
 
 template <typename T>
@@ -53,7 +52,7 @@ Iterator <T> Iterator<T>::next()
 template <typename T> //указывает ли итератор на конечный (фиктивный) элемент контейнера
 bool Iterator <T>::is_end()
 {
-    bool result;
+    bool result = false;
     if (it_r == mat.get_rows() && it_c == 0)
         result = true;
     return result;
@@ -62,7 +61,7 @@ bool Iterator <T>::is_end()
 template <typename T> //указывает ли итератор на первый элемент контейнера
 bool Iterator<T>::is_begin()
 {
-    bool result;
+    bool result = false;
     if (it_r == 0 && it_c == 0)
         result = true;
     return result;

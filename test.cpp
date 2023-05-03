@@ -5,7 +5,8 @@ void tests()
     length_constructor_check();
     copy_constructor_check();
     init_list_constructor_check();
-//    move_constructor_check();
+    move_constructor_check();
+
     operator_equal_check();
     operator_equal_sum_check();
     operator_equal_diff_check();
@@ -83,13 +84,14 @@ void copy_constructor_check()
     }
 }
 
-void move_constructor_check() //??? программа заканчивается сразу после этого конструктора
+void move_constructor_check() //
 {
     std::cout << "----------------------------------------------" << std::endl;
     std::cout << "move constructor:" << std::endl;
     Matrix <int> init_matrix ({{1,2,3}, {4,5,6}});
     Matrix <int> temp_matrix (init_matrix);
-    Matrix <int> moved_matrix (std::move(init_matrix));
+    const Matrix <int> &&rmat = (Matrix<int>)init_matrix;
+    Matrix <int> moved_matrix (rmat);
     std::cout << "init matrix copied to temp matrix: "<< temp_matrix << std::endl;
     std::cout << "moved matrix: " << moved_matrix << std::endl;
     for (int i = 0; i<temp_matrix.get_rows(); i++)
