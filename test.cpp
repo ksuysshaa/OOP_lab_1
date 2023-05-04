@@ -54,7 +54,7 @@ void length_constructor_check()
         std::cerr << "error with length constructor" << std::endl;
     std::cout << "trying size for cols: " << -cols << std::endl;
     try {
-        Matrix <int> mat_new(rows, -cols);
+        Matrix <int> mat_new(rows, 0);
     } catch (Exceptions &ex) {
         std::cout << ex << std::endl;
     }
@@ -143,6 +143,14 @@ void init_list_constructor_check()
     } catch (Exceptions &ex){
         std::cout << ex << std::endl;
     }
+    std::cout << "trying empty list:" << std::endl;
+    try {
+        Matrix <int> matr ({{2, 3, 4}, {6, 8, 10}, {22, 7, 5, 19}});
+        std::cout << matr << std::endl;
+    } catch (Exceptions &ex){
+        std::cout << ex << std::endl;
+    }
+
 }
 
 void operator_equal_check()
@@ -168,15 +176,38 @@ void operator_equal_check()
         std::cout << ex << std::endl;
     }
 
+    Matrix <int> matr;
     std::cout << "trying to equate matrix to empty matrix:" << std::endl;
     try {
-        Matrix <int> matr;
+
 //        std::cout << matr << std::endl;
+
         Matrix <int> new_mat = matr;
         std::cout << new_mat << matr <<  std::endl;
     } catch (Exceptions &ex){
         std::cout << ex << std::endl;
     }
+
+    Matrix <int> init_matrix_2 ({{1, 2, 3}, {4, 5, 6}});
+    Matrix <int> equal_matrix_2 ({{4, 5, 6}, {2, 3, 6}});
+    equal_matrix_2 = init_matrix_2;
+    std::cout << "initial matrix: " << init_matrix_2 << "equal matrix: " << equal_matrix_2 << std::endl;
+//    for (int i = 0; i<init_matrix.get_rows(); i++)
+//        for (int j = 0; j<init_matrix.get_cols(); j++)
+//            if (init_matrix(i,j) != equal_matrix(i,j))
+//                std::cerr << "operator = error." << std::endl;
+
+    std::cout << "trying to equate matrix to empty matrix:" << std::endl;
+    try {
+
+//        std::cout << matr << std::endl;
+
+        equal_matrix_2 = matr;
+        std::cout << "initial matrix: " << init_matrix_2 << "equal matrix: " << equal_matrix_2 << std::endl;
+    } catch (Exceptions &ex){
+        std::cout << ex << std::endl;
+    }
+
 }
 
 void operator_equal_sum_check()
@@ -392,7 +423,7 @@ void operator_mult()
     Matrix <int> res_matrix = init_matrix * sec_matrix;
     std::cout << "result matrix: " << res_matrix << std::endl;
 
-    std::cout << "trying to - matrix with different sizes:" << std::endl;
+    std::cout << "trying to * matrix with different sizes:" << std::endl;
     try {
         Matrix <int> matr (1,1);
         std::cout << "first matrix number of rows and cols: "<< matr.get_rows() << " " << matr.get_cols() << std::endl;
@@ -416,7 +447,7 @@ void operator_mult()
     try {
         Matrix <int> matr;
         Matrix <int> sec_matr;
-        Matrix <int> res_matrix = sec_matr - matr;
+        Matrix <int> res_matrix = sec_matr * matr;
         std::cout << res_matrix <<  std::endl;
     } catch (Exceptions &ex){
         std::cout << ex << std::endl;
@@ -485,6 +516,16 @@ void operator_mat_div_num()
     } catch (Exceptions &ex) {
         std::cout << ex << std::endl;
     }
+
+    std::cout << "trying int matrix / 0:" << std::endl;
+    try {
+        double b = 0;
+        Matrix <int> mat;
+        Matrix <int> res_int_matrix = mat / b;
+        std::cout << "result matrix: " << res_int_matrix << std::endl;
+    } catch (Exceptions &ex) {
+        std::cout << ex << std::endl;
+    }
 }
 
 void operator_mat_mult_num()
@@ -509,6 +550,16 @@ void operator_mat_mult_num()
         double b = 0;
         std::cout << "initial matrix: " << init_int_matrix << "number: " << b << std::endl;
         Matrix <int> res_int_matrix = init_int_matrix * b;
+        std::cout << "result matrix: " << res_int_matrix << std::endl;
+    } catch (Exceptions &ex) {
+        std::cout << ex << std::endl;
+    }
+
+    std::cout << "trying int matrix / 0:" << std::endl;
+    try {
+        double b = 0;
+        Matrix <int> mat;
+        Matrix <int> res_int_matrix = mat * b;
         std::cout << "result matrix: " << res_int_matrix << std::endl;
     } catch (Exceptions &ex) {
         std::cout << ex << std::endl;
@@ -543,11 +594,16 @@ void get_elem_check()
     std::cout << "initial matrix: " << init_matrix;
     const int ind_r_2 = 0, ind_c_2 = 0;
     std::cout << "expected elem: " << init_matrix.get_elem(ind_r_2, ind_c_2) << std::endl << "actual elem: " << init_matrix(ind_r_2,ind_c_2) << std::endl;
+    init_matrix(init_matrix.get_rows()-1, ind_c_2) = 9999;
+    std::cout << init_matrix(init_matrix.get_rows()-1, ind_c_2) <<std::endl;
+
     if (init_matrix(ind_r_2, ind_c_2) != init_matrix.get_elem(ind_r_2,ind_c_2))
             std::cerr << "get elem error." << std::endl;
     std::cout << "trying index for rows: " << init_matrix.get_rows()+5 << std::endl;
     try {
-        std::cout << init_matrix.get_elem(init_matrix.get_rows()+5, ind_c_2) <<std::endl;
+        std::cout << init_matrix(init_matrix.get_rows()+5, ind_c_2) <<std::endl;
+        init_matrix(init_matrix.get_rows()+5, ind_c_2) = 9999;
+        std::cout << init_matrix(init_matrix.get_rows()+5, ind_c_2) <<std::endl;
     } catch (Exceptions &ex) {
         std::cout << ex << std::endl;
     }
