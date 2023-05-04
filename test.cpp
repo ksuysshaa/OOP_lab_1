@@ -165,6 +165,11 @@ void operator_equal_check()
             if (init_matrix(i,j) != equal_matrix(i,j))
                 std::cerr << "operator = error." << std::endl;
 
+    Matrix <int> init_matrix_2 ({{1, 2, 3}, {4, 5, 6}});
+    Matrix <int> equal_matrix_2 ({{4, 5, 6}, {2, 3, 6}});
+    equal_matrix_2 = init_matrix_2;
+    std::cout << "initial matrix: " << init_matrix_2 << "equal matrix: " << equal_matrix_2 << std::endl;
+
     std::cout << "trying to equate matrix with different sizes:" << std::endl;
     try {
         Matrix <int> matr (1,1);
@@ -179,35 +184,19 @@ void operator_equal_check()
     Matrix <int> matr;
     std::cout << "trying to equate matrix to empty matrix:" << std::endl;
     try {
-
-//        std::cout << matr << std::endl;
-
         Matrix <int> new_mat = matr;
         std::cout << new_mat << matr <<  std::endl;
     } catch (Exceptions &ex){
         std::cout << ex << std::endl;
     }
 
-    Matrix <int> init_matrix_2 ({{1, 2, 3}, {4, 5, 6}});
-    Matrix <int> equal_matrix_2 ({{4, 5, 6}, {2, 3, 6}});
-    equal_matrix_2 = init_matrix_2;
-    std::cout << "initial matrix: " << init_matrix_2 << "equal matrix: " << equal_matrix_2 << std::endl;
-//    for (int i = 0; i<init_matrix.get_rows(); i++)
-//        for (int j = 0; j<init_matrix.get_cols(); j++)
-//            if (init_matrix(i,j) != equal_matrix(i,j))
-//                std::cerr << "operator = error." << std::endl;
-
     std::cout << "trying to equate matrix to empty matrix:" << std::endl;
     try {
-
-//        std::cout << matr << std::endl;
-
         equal_matrix_2 = matr;
         std::cout << "initial matrix: " << init_matrix_2 << "equal matrix: " << equal_matrix_2 << std::endl;
     } catch (Exceptions &ex){
         std::cout << ex << std::endl;
     }
-
 }
 
 void operator_equal_sum_check()
@@ -517,7 +506,7 @@ void operator_mat_div_num()
         std::cout << ex << std::endl;
     }
 
-    std::cout << "trying int matrix / 0:" << std::endl;
+    std::cout << "trying empty matrix / 0:" << std::endl;
     try {
         double b = 0;
         Matrix <int> mat;
@@ -555,7 +544,7 @@ void operator_mat_mult_num()
         std::cout << ex << std::endl;
     }
 
-    std::cout << "trying int matrix / 0:" << std::endl;
+    std::cout << "trying empty matrix * 0:" << std::endl;
     try {
         double b = 0;
         Matrix <int> mat;
@@ -594,8 +583,10 @@ void get_elem_check()
     std::cout << "initial matrix: " << init_matrix;
     const int ind_r_2 = 0, ind_c_2 = 0;
     std::cout << "expected elem: " << init_matrix.get_elem(ind_r_2, ind_c_2) << std::endl << "actual elem: " << init_matrix(ind_r_2,ind_c_2) << std::endl;
+
+    std::cout << ("trying to change value: ") << std::endl;
     init_matrix(init_matrix.get_rows()-1, ind_c_2) = 9999;
-    std::cout << init_matrix(init_matrix.get_rows()-1, ind_c_2) <<std::endl;
+    std::cout << "new elem" << init_matrix(init_matrix.get_rows()-1, ind_c_2) <<std::endl;
 
     if (init_matrix(ind_r_2, ind_c_2) != init_matrix.get_elem(ind_r_2,ind_c_2))
             std::cerr << "get elem error." << std::endl;

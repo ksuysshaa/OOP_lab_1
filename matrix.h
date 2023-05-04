@@ -186,7 +186,7 @@ void Matrix <T>::set_elem (unsigned int i, unsigned j, const T& elem) //мето
 template <typename T>
 T& Matrix <T>::operator () (unsigned int i, unsigned int j) //метод получения элемента матрицы по индексу
 {
-    if (i < 0 || i > get_rows() || j < 0 || j > get_cols())
+    if (i < 0 || i >= get_rows() || j < 0 || j >= get_cols())
         throw Exceptions ("incorrect index");
     return data[i][j];
 }
@@ -194,7 +194,7 @@ T& Matrix <T>::operator () (unsigned int i, unsigned int j) //метод пол�
 template <typename T>
 T& Matrix <T>::get_elem (unsigned int i, unsigned int j) //метод получения элемента матрицы по индексу
 {
-    if (i < 0 || i > get_rows() || j < 0 || j > get_cols())
+    if (i < 0 || i >= get_rows() || j < 0 || j >= get_cols())
         throw Exceptions ("incorrect index");
     return data[i][j];
 }
