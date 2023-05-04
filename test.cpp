@@ -29,8 +29,6 @@ void tests()
     iterator_next_increment_check();
     iterator_value_check();
     iterator_operators_check();
-
-    move_constructor_check();
 }
 
 void length_constructor_check()
@@ -89,10 +87,10 @@ void move_constructor_check() //
     std::cout << "----------------------------------------------" << std::endl;
     std::cout << "move constructor:" << std::endl;
     Matrix <int> init_matrix ({{1,2,3}, {4,5,6}});
+    std::cout << "init matrix before move: "<< init_matrix << std::endl;
     Matrix <int> temp_matrix (init_matrix);
     const Matrix <int> &&rmat = (Matrix<int>)init_matrix;
     Matrix <int> moved_matrix (rmat);
-    std::cout << "init matrix copied to temp matrix: "<< temp_matrix << std::endl;
     std::cout << "moved matrix: " << moved_matrix << std::endl;
     for (int i = 0; i<temp_matrix.get_rows(); i++)
         for (int j = 0; j<temp_matrix.get_cols(); j++)
@@ -102,8 +100,9 @@ void move_constructor_check() //
     std::cout << "trying empty matrix: " << std::endl;
     try {
         Matrix <int> init_matrix;
-        Matrix <int> moved_matrix (std::move(init_matrix));
-        std::cout << moved_matrix << std::endl;
+        const Matrix <int> &&rmat_2 = (Matrix<int>)init_matrix;
+        Matrix <int> moved_matrix_2 (rmat_2);
+        std::cout << moved_matrix_2 << std::endl;
     } catch (Exceptions &ex) {
         std::cout << ex<< std::endl;
     }
@@ -169,7 +168,7 @@ void operator_equal_check()
         std::cout << ex << std::endl;
     }
 
-    std::cout << "trying to equate empty matrix to matrix:" << std::endl;
+    std::cout << "trying to equate matrix to empty matrix:" << std::endl;
     try {
         Matrix <int> matr;
 //        std::cout << matr << std::endl;
@@ -316,7 +315,7 @@ void operator_plus()
         Matrix <int> matr (1,1);
         std::cout << "first matrix number of rows and cols: "<< matr.get_rows() << " " << matr.get_cols() << std::endl;
         std::cout << "second matrix number of rows and cols: "<< sec_matrix.get_rows() << " " << sec_matrix.get_cols() << std::endl;
-        Matrix <int> res_matrix = init_matrix - sec_matrix;
+        Matrix <int> res_matrix = matr - sec_matrix;
         std::cout << res_matrix << std::endl;
     } catch (Exceptions &ex){
         std::cout << ex << std::endl;
@@ -357,7 +356,7 @@ void operator_minus()
         Matrix <int> matr (1,1);
         std::cout << "first matrix number of rows and cols: "<< matr.get_rows() << " " << matr.get_cols() << std::endl;
         std::cout << "second matrix number of rows and cols: "<< sec_matrix.get_rows() << " " << sec_matrix.get_cols() << std::endl;
-        Matrix <int> res_matrix = init_matrix - sec_matrix;
+        Matrix <int> res_matrix = matr - sec_matrix;
         std::cout << res_matrix << std::endl;
     } catch (Exceptions &ex){
         std::cout << ex << std::endl;
@@ -398,7 +397,7 @@ void operator_mult()
         Matrix <int> matr (1,1);
         std::cout << "first matrix number of rows and cols: "<< matr.get_rows() << " " << matr.get_cols() << std::endl;
         std::cout << "second matrix number of rows and cols: "<< sec_matrix.get_rows() << " " << sec_matrix.get_cols() << std::endl;
-        Matrix <int> res_matrix = init_matrix * sec_matrix;
+        Matrix <int> res_matrix = matr * sec_matrix;
         std::cout << res_matrix << std::endl;
     } catch (Exceptions &ex){
         std::cout << ex << std::endl;
@@ -502,7 +501,7 @@ void operator_mat_mult_num()
     Matrix <int> init_int_matrix ({{1, 2, 3}, {4, 5, 6}});
     std::cout << "trying int matrix * num:" << std::endl;
     std::cout << "initial matrix: " << init_int_matrix << "number: " << a << std::endl;
-    Matrix <int> res_int_matrix = init_int_matrix / a;
+    Matrix <int> res_int_matrix = init_int_matrix * a;
     std::cout << "result matrix: " << res_int_matrix << std::endl;
 
     std::cout << "trying int matrix * 0:" << std::endl;

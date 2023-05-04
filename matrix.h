@@ -200,7 +200,7 @@ T& Matrix <T>::get_elem (unsigned int i, unsigned int j) //метод получ
 }
 
 template <typename T>
-Matrix<T>& Matrix <T>::operator = (const Matrix<T>& mat) //перегрузка оператора присваивания
+Matrix<T>& Matrix <T>::operator = (const Matrix<T>& mat) //перегрузка оператора =
 {
     if (rows != mat.get_rows() || cols != mat.get_cols())
         throw Exceptions ("different size of matrix.");
@@ -237,6 +237,8 @@ template<typename T>
 Matrix<T> Matrix <T>::operator +(const Matrix<T>& mat) //перегрузка оператора +
 {
     Matrix <T> new_mat(*this);
+    if (rows != mat.get_rows() || cols != mat.get_cols())
+        throw Exceptions ("different size of matrix.");
     new_mat += mat;
     return new_mat;
 }
@@ -245,6 +247,8 @@ template<typename T>
 Matrix<T> Matrix <T>::operator -(const Matrix<T>& mat) //перегрузка оператора -
 {
     Matrix <T> new_mat(*this);
+    if (rows != mat.get_rows() || cols != mat.get_cols())
+        throw Exceptions ("different size of matrix.");
     new_mat -= mat;
     return new_mat;
 }
