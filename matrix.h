@@ -35,8 +35,8 @@ public:
 
     //перегрузка операторов
     Matrix<T>& operator = (const Matrix<T>&mat);
-    Matrix<T>& operator +=(const Matrix<T>&mat);
-    Matrix<T>& operator -=(const Matrix<T>&mat);
+    Matrix<T>& operator += (const Matrix<T>&mat);
+    Matrix<T>& operator -= (const Matrix<T>&mat);
 
     //перегрузка операторов для двух матриц
     Matrix<T> operator +(const Matrix<T>& mat);
@@ -76,7 +76,7 @@ void Matrix <T>::alloc_memory()
 template <typename T> //конструктор длины
 Matrix <T>::Matrix (int n, int m)
 {
-    if (n < 0 || m < 0)
+    if (n <= 0 || m <= 0)
         throw Exceptions ("incorrect size.");
     rows = (size_t) n;
     cols = (size_t) m;

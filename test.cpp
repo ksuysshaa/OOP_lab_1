@@ -1,5 +1,28 @@
 #include "test.h"
 
+void length_constructor_check();
+void copy_constructor_check();
+void move_constructor_check();
+void init_list_constructor_check();
+void operator_equal_check();
+void operator_equal_sum_check();
+void operator_equal_diff_check();
+void operator_plus();
+void operator_minus();
+void operator_mult();
+void operator_mat_plus_num();
+void operator_mat_minus_num();
+void operator_mat_div_num();
+void operator_mat_mult_num();
+void get_elem_check();
+void is_square_check();
+void get_rows_cols_check();
+void set_elem_check();
+void iterator_begin_end_check();
+void iterator_next_increment_check();
+void iterator_value_check();
+void iterator_operators_check();
+
 void tests()
 {
     length_constructor_check();
@@ -89,7 +112,7 @@ void move_constructor_check() //
     Matrix <int> init_matrix ({{1,2,3}, {4,5,6}});
     std::cout << "init matrix before move: "<< init_matrix << std::endl;
     Matrix <int> temp_matrix (init_matrix);
-    const Matrix <int> &&rmat = (Matrix<int>)init_matrix;
+    const Matrix <int> &&rmat = (Matrix <int>)init_matrix;
     Matrix <int> moved_matrix (rmat);
     std::cout << "moved matrix: " << moved_matrix << std::endl;
     for (int i = 0; i<temp_matrix.get_rows(); i++)
@@ -143,7 +166,7 @@ void init_list_constructor_check()
     } catch (Exceptions &ex){
         std::cout << ex << std::endl;
     }
-    std::cout << "trying empty list:" << std::endl;
+    std::cout << "trying list with different sizes of initializer lists:" << std::endl;
     try {
         Matrix <int> matr ({{2, 3, 4}, {6, 8, 10}, {22, 7, 5, 19}});
         std::cout << matr << std::endl;
@@ -165,6 +188,7 @@ void operator_equal_check()
             if (init_matrix(i,j) != equal_matrix(i,j))
                 std::cerr << "operator = error." << std::endl;
 
+    std::cout << "trying to equate not empty matrix to not empty matrix:" << std::endl;
     Matrix <int> init_matrix_2 ({{1, 2, 3}, {4, 5, 6}});
     Matrix <int> equal_matrix_2 ({{4, 5, 6}, {2, 3, 6}});
     equal_matrix_2 = init_matrix_2;
@@ -266,6 +290,7 @@ void operator_equal_diff_check()
     std::cout << "initial matrix: " << init_matrix;
     Matrix <int> temp_matrix (init_matrix);
     Matrix <int> min_matrix ({{7, -5, 29}, {2, 4, 7}});
+    std::cout << "second matrix: " << min_matrix;
     init_matrix -= min_matrix;
     std::cout << "equal diff matrix: " << init_matrix << std::endl;
     for (int i = 0; i<init_matrix.get_rows(); i++)
@@ -741,7 +766,7 @@ void iterator_value_check()
             std::cout << it.value() << " ";
         ++it;
     }
-    flag ? std::cout << "test passed" << std::endl : std::cout << "test not passed" << std::endl;
+    flag ? std::cout << "\ntest passed" << std::endl : std::cout << "test not passed" << std::endl;
 
     std::cout << std::endl;
     std::cout << "iterator operator *:" << std::endl;
@@ -755,7 +780,7 @@ void iterator_value_check()
             std::cout << *it_1 << " ";
         ++it_1;
     }
-    flag ? std::cout << "test passed" << std::endl : std::cout << "test not passed" << std::endl;
+    flag ? std::cout << "\ntest passed" << std::endl : std::cout << "test not passed" << std::endl;
 }
 
 void iterator_operators_check()
