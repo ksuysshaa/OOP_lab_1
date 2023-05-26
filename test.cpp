@@ -103,6 +103,7 @@ void copy_constructor_check()
     } catch (Exceptions &ex) {
         std::cout << ex<< std::endl;
     }
+
 }
 
 void move_constructor_check() //
@@ -788,17 +789,19 @@ void iterator_operators_check()
     std::cout << "----------------------------------------------" << std::endl;
     std::cout << "iterator operators == and !=:" << std::endl;
     Matrix <int> matrix ({{1, 2, 3}, {4, 5, 6}});
+    Matrix <int> matrix_2 ({{1, 2, 3}, {4, 5, 6}});
     Iterator <int> it_1 = matrix.iterator_begin();
     Iterator <int> it_2 = matrix.iterator_begin();
-    bool flag = true;
-    for (; !it_1.is_end() && !it_2.is_end();) {
-        if (*it_1 == *it_2) {
-        } else if (*it_1 != *it_2){
-            std::cerr << "iterator operators error.";
-            flag = false;
-        }
-        ++it_1;
-        ++it_2;
-    }
-    flag ? std::cout << "test passed" << std::endl : std::cout << "test not passed" << std::endl;
+    Iterator <int> it_mat_2 = matrix_2.iterator_begin();
+    if (it_1 != it_mat_2)
+        std::cout << "diff matrixes" << std::endl << "test passed" << std::endl;
+    else
+        std::cout << "diff matrixes" << std::endl << "test not passed" << std::endl;
+
+    std::cout << std::endl;
+    if (it_1 == it_2)
+        std::cout << "equal matrixes" << std::endl << "test passed" << std::endl;
+    else
+        std::cout << "diff matrixes" << std::endl << "test not passed" << std::endl;
+
 }

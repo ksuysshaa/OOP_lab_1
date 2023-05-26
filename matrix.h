@@ -63,21 +63,21 @@ void Matrix <T>::alloc_memory()
 {
     try {
         data = new T* [rows];
-        for (int i = 0; i < rows; i++)
+        for (size_t i = 0; i < rows; i++)
             data[i] = new T [cols];
     }
     catch (std::bad_alloc &ex) {
-        throw Exceptions ("memory allocation error.");
-        if (data != NULL)
+        if (data != nullptr)
             delete[] data;
+        rows = 0;
+        cols = 0;
+        throw Exceptions ("memory allocation error.");
     }
 }
 
 template <typename T> //конструктор длины
 Matrix <T>::Matrix (int n, int m)
 {
-    if (n <= 0 || m <= 0)
-        throw Exceptions ("incorrect size.");
     rows = (size_t) n;
     cols = (size_t) m;
     alloc_memory();
@@ -88,11 +88,9 @@ Matrix <T>::Matrix(const Matrix<T>& mat) //конструктор копиров
 {
     rows = mat.get_rows();
     cols = mat.get_cols();
-    if (rows == 0 || cols == 0)
-        throw Exceptions ("memory allocation error.");
     alloc_memory();
-    for (int i = 0; i<rows; i++) {
-        for (int j = 0; j<cols; j++)
+    for (size_t i = 0; i<rows; i++) {
+        for (size_t j = 0; j<cols; j++)
             data[i][j] = mat.data[i][j];
     }
 }
@@ -103,6 +101,8 @@ Matrix <T>::Matrix(Matrix<T>&& mat)
     rows = mat.rows;
     cols = mat.cols;
     data = mat.data;
+    mat.rows = 0;
+    mat.cols = 0;
     mat.data = nullptr;
 }
 
@@ -111,24 +111,16 @@ Matrix <T>::Matrix(std::initializer_list<std::initializer_list< T>> lst) //ко�
 {
     int ind_i = 0, ind_j = 0;
     rows = lst.size();
-    cols = 0;
+    if (lst.size() /*lst.size()*/ != 0)
+        cols = lst[0].size();
+    alloc_memory();
     for (auto i : lst) {
-        for (auto j : i)
-            cols++;
-        break;
-    }
-    if (rows == 0 || cols == 0)
-        throw Exceptions ("incorrect initializer list.");
-    else {
-        alloc_memory();
-        for (auto i : lst) {
-            ind_j = 0;
-            for (auto j : i) {
-                set_elem(ind_i, ind_j, j);
-                ind_j++;
-            }
-            ind_i++;
+        ind_j = 0;
+        for (auto j : i) {
+            set_elem(ind_i, ind_j, j);
+            ind_j++;
         }
+        ind_i++;
     }
 }
 
@@ -155,7 +147,7 @@ int Matrix <T>::get_rows() const
 template <typename T> //метод проверки матрицы на квадратную
 bool Matrix <T>::is_square()
 {
-    bool result;
+    bool result = false;
     if (rows == cols)
         result = true;
     return result;
@@ -164,7 +156,7 @@ bool Matrix <T>::is_square()
 template <typename _T>
 std::ostream& operator <<(std::ostream& os, const Matrix<_T>& mat) //перегрузка оператора <<
 {
-    if (mat.get_rows() == 0 || mat.get_cols() == 0)
+    if (mat.get_rows() == 0 || mat.get_cols() == 0 || mat.data == nullptr)
         throw Exceptions ("matrix is null.");
     for (int i = 0; i<mat.get_rows(); i++) {
         os << "\n";
@@ -176,11 +168,9 @@ std::ostream& operator <<(std::ostream& os, const Matrix<_T>& mat) //перег�
 }
 
 template <typename T>
-void Matrix <T>::set_elem (unsigned int i, unsigned j, const T& elem) //метод изменения элемента матрицы по индексу
+void Matrix <T>::set_elem (unsigned int i, unsigned int j, const T& elem) //метод изменения элемента матрицы по индексу
 {
-    if (i < 0 || i >= get_rows() || j < 0 || j >= get_cols())
-        throw Exceptions ("incorrect index");
-    data[i][j] = elem;
+    *data(i, j) = elem;
 }
 
 template <typename T>
@@ -194,20 +184,15 @@ T& Matrix <T>::operator () (unsigned int i, unsigned int j) //метод пол�
 template <typename T>
 T& Matrix <T>::get_elem (unsigned int i, unsigned int j) //метод получения элемента матрицы по индексу
 {
-    if (i < 0 || i >= get_rows() || j < 0 || j >= get_cols())
-        throw Exceptions ("incorrect index");
-    return data[i][j];
+    return data(i,j);
 }
 
 template <typename T>
 Matrix<T>& Matrix <T>::operator = (const Matrix<T>& mat) //перегрузка оператора =
 {
-    if (rows != mat.get_rows() || cols != mat.get_cols())
-        throw Exceptions ("different size of matrix.");
-    alloc_memory();
-    for (int i = 0; i<rows; i++)
-        for (int j = 0; j<cols; j++)
-            data[i][j] = mat.data[i][j];
+    this->~Matrix();
+    Matrix <T> matrix_2(mat);
+    *this = matrix_2;
     return *this;
 }
 
@@ -216,8 +201,8 @@ Matrix<T>& Matrix<T>::operator +=(const Matrix<T>&mat) //перегрузка о
 {
     if (rows != mat.get_rows() || cols != mat.get_cols())
         throw Exceptions ("different size of matrix.");
-    for (int i = 0; i<rows; i++)
-        for (int j = 0; j<cols; j++)
+    for (size_t i = 0; i<rows; i++)
+        for (size_t j = 0; j<cols; j++)
             data[i][j] += mat.data[i][j];
     return *this;
 }
@@ -227,8 +212,8 @@ Matrix<T>& Matrix<T>::operator -= (const Matrix<T> &mat) //перегрузка 
 {
     if (rows != mat.get_rows() || cols != mat.get_cols())
         throw Exceptions ("different size of matrix.");
-    for (int i = 0; i<rows; i++)
-        for (int j = 0; j<cols; j++)
+    for (size_t i = 0; i<rows; i++)
+        for (size_t j = 0; j<cols; j++)
             data[i][j] -= mat.data[i][j];
     return *this;
 }

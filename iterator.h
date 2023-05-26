@@ -95,13 +95,18 @@ T & Iterator<T>::operator*()
 template <typename T> //оператор сравнения
 bool Iterator<T>::operator ==(Iterator<T> &b)
 {
-    return ((it_r == b.it_r) && (it_c == b.it_r));
+    return ((it_r == b.it_r) && (it_c == b.it_r) && (&mat == &b.mat));
 }
 
 template <typename T> //оператор сравнения
 bool Iterator<T>::operator !=(Iterator<T> &b)
 {
-    return ((it_r != b.it_r) || (it_c != b.it_r));
+    bool result;
+    if ((((it_r != b.it_r) || (it_c != b.it_r)) && (&mat == &b.mat)) || (&mat != &b.mat))
+        result = true;
+    else
+        result = false;
+    return result;
 }
 
 #endif // ITERATOR_H
