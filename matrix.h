@@ -54,8 +54,8 @@ public:
     friend std::ostream& operator <<(std::ostream& os, const Matrix<_T>& mat);
 
     //итераторы
-    Iterator<T> iterator_begin() {return Iterator<T>(*this, 0, 0);};
-    Iterator<T> iterator_end() {return Iterator<T>(*this, get_rows(), 0);};
+    Iterator<T> iterator_begin() {return Iterator<T>(*this, 0, 0);}
+    Iterator<T> iterator_end() {return Iterator<T>(*this, get_rows(), 0);}
 };
 
 template <typename T> //выделение памяти - вспомогательная функция
@@ -111,8 +111,14 @@ Matrix <T>::Matrix(std::initializer_list<std::initializer_list< T>> lst) //ко�
 {
     int ind_i = 0, ind_j = 0;
     rows = lst.size();
-    if (lst.size() /*lst.size()*/ != 0)
-        cols = lst[0].size();
+    cols = 0;
+    for (auto i : lst) {
+        for (auto j : i)
+            cols++;
+        break;
+    }
+    if (rows == 0 || cols == 0)
+        throw Exceptions ("incorrect initializer list.");
     alloc_memory();
     for (auto i : lst) {
         ind_j = 0;
@@ -170,7 +176,7 @@ std::ostream& operator <<(std::ostream& os, const Matrix<_T>& mat) //перег�
 template <typename T>
 void Matrix <T>::set_elem (unsigned int i, unsigned int j, const T& elem) //метод изменения элемента матрицы по индексу
 {
-    *data(i, j) = elem;
+    *(*(data + i) + j) = elem;
 }
 
 template <typename T>
@@ -184,16 +190,32 @@ T& Matrix <T>::operator () (unsigned int i, unsigned int j) //метод пол�
 template <typename T>
 T& Matrix <T>::get_elem (unsigned int i, unsigned int j) //метод получения элемента матрицы по индексу
 {
-    return data(i,j);
+    if (i < 0 || i >= get_rows() || j < 0 || j >= get_cols())
+        throw Exceptions ("incorrect index");
+    return data[i][j];
+//    return *(*(data + i) + j);
 }
 
 template <typename T>
 Matrix<T>& Matrix <T>::operator = (const Matrix<T>& mat) //перегрузка оператора =
 {
-    this->~Matrix();
-    Matrix <T> matrix_2(mat);
-    *this = matrix_2;
+    if (this == &mat)
+        return *this;
+    for (int i = 0; i< rows; i++)
+        delete[] data[i];
+    delete[] data;
+    rows = mat.get_rows();
+    cols = mat.get_cols();
+    alloc_memory();
+    for (size_t i = 0; i<rows; i++) {
+        for (size_t j = 0; j<cols; j++)
+            data[i][j] = mat.data[i][j];
+    }
     return *this;
+//    this->~Matrix();
+//    Matrix <T> matrix_2(mat);
+//    *this = matrix_2;
+//    return *this;
 }
 
 template <typename T>
